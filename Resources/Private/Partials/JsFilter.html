@@ -1,0 +1,44 @@
+<div class="jsFilter" style="display: none; position: relative; z-index: 100000;">
+    <f:if condition="{settings.jsFiltertype} == 'jsFilterChildOfSelected'">
+        <f:then>
+            <f:for each="{filterCategories}" as="parentCat">
+				<div class="select">
+					<select name="category-filter-{parentCat.uid}">
+						<option value="">{parentCat.title}</option>
+						<f:for each="{parentCat}" as="cat" key="key">
+							<f:if condition="{cat.uid}">
+								<option value="{cat.uid}">{cat.title}</option>
+							</f:if>
+						</f:for>
+					</select>
+				</div>
+            </f:for>
+        </f:then>
+        <f:else>
+            <div class="select">
+				<select name="category-filter">
+					<option value="">-</option>
+					<f:for each="{filterCategories}" as="cat" key="key">
+						<f:if condition="{cat.uid}">
+							<option value="{cat.uid}">{cat.title}</option>
+						</f:if>
+					</f:for>
+				</select>
+			</div>
+        </f:else>
+    </f:if>
+    
+    <a href="#" class="button sec resetJsFilter">x</a>
+    
+    
+    <script type="text/javascript">
+        var jsFilterSectioncontentInterval = window.setInterval(function() {
+            if (typeof(jQuery) != 'undefined') {
+                $.getScript("/typo3conf/ext/sectioncontent/Resources/Public/js/filter.js");
+                
+                window.clearInterval(jsFilterSectioncontentInterval);
+            }
+        }, 50);
+    </script>
+    
+</div>

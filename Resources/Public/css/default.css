@@ -1,0 +1,36 @@
+.f3-widget-paginator {
+	width: 100%;
+	position: relative;
+	text-align: center;
+	clear:both;
+	padding-top:2rem;
+}
+
+.f3-widget-paginator li {
+	display: inline-block;
+	list-style: none;
+}
+
+option.notPossible {
+	color: #cccccc;
+}
+
+.itemCount {
+	margin-bottom:2rem;
+}
+
+.item {
+	margin-bottom:20px;
+}
+
+.item a {
+	display:block;
+	background:#f5f5f5;
+	text-decoration:none;
+	color:#000;
+}
+
+.item h3 {
+	margin:0;
+	padding:20px;
+}

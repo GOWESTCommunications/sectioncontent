@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2015-12-23T14:21:42Z">
+		<header>
+			<description>Language labels for the Sectioncontent extension in the FRONTEND</description>
+			<authorName>Michael Nußbaumer</authorName>
+			<authorEmail>m.nussbaumer@go-west.at</authorEmail>
+			<generator>LFEditor</generator>
+		</header>
+		<body>
+                    <trans-unit id="tx_sectioncontent_new_tab">
+                            <target>Übersichtseinstellungen</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_title">
+                            <target>Titel (Übersicht)</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_subtitle">
+                            <target>Untertitel (Übersicht)</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_description">
+                            <target>Beschreibung (Übersicht)</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_image">
+                            <target>Bild 1 (Übersicht)</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_image_2">
+                            <target>Bild 2 (Übersicht)</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_reference_url">
+                            <target>Link</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_attr_1">
+                            <target>Attribut 1</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_attr_2">
+                            <target>Attribut 2</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_attr_3">
+                            <target>Attribut 3</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_attr_4">
+                            <target>Attribut 4</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_attr_5">
+                            <target>Attribut 5</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_attr_6">
+                            <target>Attribut 6</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_attr_7">
+                            <target>Attribut 7</target>
+                    </trans-unit>
+                    <trans-unit id="tx_sectioncontent_abstract_attr_8">
+                            <target>Attribut 8</target>
+                    </trans-unit>
+		</body>
+	</file>
+</xliff>

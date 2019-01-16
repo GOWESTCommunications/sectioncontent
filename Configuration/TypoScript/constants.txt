@@ -1,0 +1,20 @@
+
+plugin.tx_sectioncontent {
+	view {
+		# cat=plugin.tx_sectioncontent/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:sectioncontent/Resources/Private/Templates/
+		# cat=plugin.tx_sectioncontent/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:sectioncontent/Resources/Private/Partials/
+		# cat=plugin.tx_sectioncontent/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:sectioncontent/Resources/Private/Layouts/
+	}
+        
+        
+        # cat=plugin.tx_sectioncontent//a; label=Hover Effect Layout (http://tympanus.net/codrops/2014/06/19/ideas-for-subtle-hover-effects/); type=options[effect-lily,effect-sadie,effect-honey,effect-layla,effect-zoe,effect-oscar,effect-marley,effect-ruby,effect-roxy,effect-bubba,effect-romeo,effect-dexter,effect-sarah,effect-chico,effect-milo,effect-julia,effect-goliath,effect-hera,effect-winston,effect-selena,effect-terry,effect-phoebe,effect-apollo,effect-kira,effect-steve,effect-moses,effect-jazz,effect-ming,effect-lexi,effect-duke];
+        hoverEffect = effect-lily
+        
+	persistence {
+		# cat=plugin.tx_sectioncontent//a; type=string; label=Default storage PID
+		storagePid =
+	}
+}

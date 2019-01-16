@@ -1,0 +1,92 @@
+<html
+    dir=xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+    xmlns:sectioncontent="http://typo3.org/ns/GoWest/Sectioncontent/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+<f:layout name="Default" />
+
+<f:section name="main">
+	<f:if condition="{settings.jsFiltertype}">
+		<f:render partial="JsFilter" arguments="{_all}"/>
+	</f:if>
+	
+	<f:if condition="{settings.jsFiltertype}">
+		<script type="text/javascript">
+			var goJsFilter = {
+				options: {
+					layoutMode: 'masonry',
+					resetOtherFilters: <f:if condition="{settings.resetJsFilter}"><f:then>true</f:then><f:else>false</f:else></f:if>
+				}
+			};
+		</script>
+	</f:if>
+    <div class="overview">
+	<f:if condition="{f:count(subject:'{pages}')}">
+		<f:then>
+			<sectioncontent:widget.paginate objects="{pages}" as="pageObject" configuration="{itemsPerPage: 15, insertAbove: 0, insertBelow: 0}">
+				<f:for each="{pageObject}" as="page">
+					<v:variable.set name="catIds" value=" "></v:variable.set>
+					<f:for each="{page.categories}" as="cat">
+						<v:variable.set name="catIds" value="{catIds} {cat.uid}"></v:variable.set>
+					</f:for>
+					<div class="col-sm-6 col-md-4 overviewItem<f:if condition="{settings.jsFiltertype}"> filterElement</f:if>" data-categories="{catIds}">
+                        <figure class="{settings.hoverEffect}">
+                            <f:render partial="SectioncontentImage" arguments="{_all}"/>
+                            
+                            <v:variable.set name="pageIMG" value=""></v:variable.set>
+                            <v:variable.set name="IMGCrop" value=""></v:variable.set>
+                            
+                            <f:if condition="{v:variable.register.get(name: 'IMGCrop')}">
+                                <v:variable.set name="IMGCrop" value="{v:variable.register.get(name: 'IMGCrop')}"></v:variable.set>
+                            </f:if>
+                            
+                            <f:if condition="{v:variable.register.get(name: 'pageIMG')}">
+                                    <v:variable.set name="pageIMG" value="{v:variable.register.get(name: 'pageIMG')}"></v:variable.set>
+                                    
+                                    
+                                    <picture>
+                                        <!--[if IE 9]><video style="display: none;"><![endif]-->
+                                        <source srcset="{f:uri.image(src: pageIMG.uid, treatIdAsReference: 1, width: '730', height: '547c', cropVariant: 'xs')}" media="{sourceCollection.xs.mediaQuery}" >
+                                        <source srcset="{f:uri.image(src: pageIMG.uid, treatIdAsReference: 1, width: '480', height: '360c', cropVariant: 'sm')}" media="{sourceCollection.sm.mediaQuery}" >
+                                        <source srcset="{f:uri.image(src: pageIMG.uid, treatIdAsReference: 1, width: '420', height: '320c', cropVariant: 'md')}" media="{sourceCollection.md.mediaQuery}" >
+                                        <source srcset="{f:uri.image(src: pageIMG.uid, treatIdAsReference: 1, width: '600', height: '420c', cropVariant: 'lg')}" media="{sourceCollection.lg.mediaQuery}" >
+                                        <source srcset="{f:uri.image(src: pageIMG.uid, treatIdAsReference: 1, width: '420', height: '320c', cropVariant: 'md')}"                                          >
+                                        <!--[if IE 9]></video><![endif]-->
+                                        <img src="{f:uri.image(src: pageIMG.uid, treatIdAsReference: 1, width: '420', height: '320c', cropVariant: 'md')}" alt="{pageIMG.alternative}">
+                                    </picture>
+                            </f:if>
+                            
+                            
+                            <figcaption>
+                                <div>
+                                    <h2>
+                                        <f:if condition="{page.txSectioncontentAbstractTitle}">
+                                            
+                                                <f:then><f:format.crop maxCharacters="20">{page.txSectioncontentAbstractTitle}</f:format.crop></f:then>
+                                                <f:else>
+                                                    <f:if condition="{page.navTitle}">
+                                                        <f:then><f:format.crop maxCharacters="20">{page.navTitle}</f:format.crop></f:then>
+                                                        <f:else><f:format.crop maxCharacters="20">{page.title}</f:format.crop></f:else>
+                                                    </f:if>
+                                                </f:else>
+                                            
+                                        </f:if>
+                                    </h2>
+                                    <p class="description"><f:format.nl2br><f:format.crop maxCharacters="80">{page.txSectioncontentAbstractDescription}</f:format.crop></f:format.nl2br></p>
+                                </div>
+                                <f:link.page class="section " pageUid="{page.uid}">
+                                    <f:translate key="LLL:{templatedir}Resources/Private/Language/locallang.xlf:gowest.readmore" />
+                                </f:link.page>
+                            </figcaption>			
+                        </figure>
+					</div>
+				</f:for>
+			</sectioncontent:widget.paginate>
+		</f:then>
+		<f:else>
+		</f:else>
+	</f:if>
+    </div>
+</f:section>
+</html>

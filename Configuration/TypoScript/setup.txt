@@ -1,0 +1,39 @@
+
+plugin.tx_sectioncontent {
+	view {
+		templateRootPath {
+                    200 = {$plugin.tx_sectioncontent.view.templateRootPath}
+                }
+		partialRootPath {
+                    200 = {$plugin.tx_sectioncontent.view.partialRootPath}
+                }
+		layoutRootPath {
+                    200 = {$plugin.tx_sectioncontent.view.layoutRootPath}
+                }
+	}
+	persistence {
+		storagePid = {$plugin.tx_sectioncontent.persistence.storagePid}
+	}
+        
+        settings.hoverEffect = {$plugin.tx_sectioncontent.hoverEffect}
+        
+}
+
+
+lib.tx_sectioncontent = USER
+lib.tx_sectioncontent {
+	userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+
+	vendorName = GoWest
+	extensionName = Sectioncontent
+	pluginName = Pi1
+
+	settings =< plugin.tx_sectioncontent.settings
+        
+        
+	persistence =< plugin.tx_sectioncontent.persistence
+	view =< plugin.tx_sectioncontent.view
+        
+}
+
+page.includeCSS.sectioncontent = EXT:sectioncontent/Resources/Public/css/default.css

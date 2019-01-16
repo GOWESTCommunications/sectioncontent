@@ -1,0 +1,21 @@
+<div class="jsFilter" style="display: none; position: relative; z-index: 100000;">
+	
+    <a class="button resetJsFilter"><f:translate key="LLL:fileadmin/template/Resources/Private/Language/locallang.xlf:overviewFilterAll" /></a>
+	
+    <f:for each="{filterCategories}" as="cat" key="key">
+		<f:if condition="{cat.uid}">
+			<button class="button" data-cat="{cat.uid}">{cat.title}</button>
+		</f:if>
+	</f:for>
+    
+    <script type="text/javascript">
+        var jsFilterSectioncontentInterval = window.setInterval(function() {
+            if (typeof(jQuery) != 'undefined') {
+                $.getScript("/typo3conf/ext/sectioncontent/Resources/Public/js/filterButton.js");
+                
+                window.clearInterval(jsFilterSectioncontentInterval);
+            }
+        }, 50);
+    </script>
+    
+</div>
