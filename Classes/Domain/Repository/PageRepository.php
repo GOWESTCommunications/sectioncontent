@@ -185,12 +185,16 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function findChildrenRecursivelyByPidList($pidlist, $recursionDepthFrom, $recursionDepth)
     {
+        
+        
         $pagePids = $this->getRecursivePageList($pidlist, $recursionDepthFrom, $recursionDepth);
-
         $this->addQueryConstraint($this->query->in(($recursionDepthFrom === 0) ? 'pid' : 'uid', $pagePids));
-        return $this->executeQuery();
+        
+        $result = $this->executeQuery();
+        
+        return $result;
     }
-
+    
     /**
      * Adds query constraint to array
      *
@@ -271,17 +275,23 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     protected function handlePageLocalization(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $pages)
     {
+        
+        
         $currentLangUid = (int)$GLOBALS['TSFE']->sys_page->sys_language_uid;
         $displayedPages = array();
         /** @var Page $page */
         foreach ($pages as $page) {
+            
+            
+            $displayedPages[] = $page;
+            /*
             if ($currentLangUid === 0) {
                 if ($page->getL18nConfiguration() !== Page::L18N_HIDE_DEFAULT_LANGUAGE &&
                     $page->getL18nConfiguration() !== Page::L18N_HIDE_ALWAYS_BUT_TRANSLATION_EXISTS) {
                     $displayedPages[] = $page;
                 }
             } else {
-                /** @var \TYPO3\CMS\Frontend\Page\PageRepository $pageSelect */
+                
                 $pageSelect = $GLOBALS['TSFE']->sys_page;
                 $pageRowWithOverlays = $pageSelect->getPage($page->getUid());
                 
@@ -291,7 +301,6 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 if(method_exists('\AOE\Languagevisibility\Services\FeServices', 'getFallbackOrderForElement')) {
                     $table = ($currentLangUid > 0) ? 'pages' : 'pages';
                     $fallbackLangUid = \AOE\Languagevisibility\Services\FeServices::getOverlayLanguageIdForElementRecord($page->getUid(), $table, $currentLangUid);
-                    
                 }
                 
                 if ((boolean)$GLOBALS['TYPO3_CONF_VARS']['FE']['hidePagesIfNotTranslatedByDefault'] === false) {
@@ -323,6 +332,7 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                     }
                 }
             }
+            */
         }
         
         return $displayedPages;
@@ -339,6 +349,8 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     protected function getRecursivePageList($pidlist, $recursionDepthFrom, $recursionDepth)
     {
         /** @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $contentObjectRenderer */
+        
+        
         $contentObjectRenderer = GeneralUtility::makeInstance('TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer');
 
         $pagePids = array();

@@ -14,9 +14,11 @@ plugin.tx_sectioncontent {
 	persistence {
 		storagePid = {$plugin.tx_sectioncontent.persistence.storagePid}
 	}
-        
-        settings.hoverEffect = {$plugin.tx_sectioncontent.hoverEffect}
-        
+    
+    settings {
+        hoverEffect = {$plugin.tx_sectioncontent.hoverEffect}
+    }
+    
 }
 
 

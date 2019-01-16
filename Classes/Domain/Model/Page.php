@@ -28,6 +28,9 @@ namespace GoWest\Sectioncontent\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+ 
+ use GoWest\Sectioncontent\Domain\Model\Content;
+ 
 /**
  * Page model
  *
@@ -288,6 +291,20 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
      */
     protected $txSectioncontentAbstractImage2;
+
+    /**
+     * abstract image 3
+     *
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
+     */
+    protected $txSectioncontentAbstractImage3;
+
+    /**
+     * abstract image 4
+     *
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
+     */
+    protected $txSectioncontentAbstractImage4;
     
 
     /**
@@ -460,7 +477,7 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Getter for contents
      *
-     * @returns array<\GoWest\Sectioncontent\Domain\Model\Content> contents
+     * @return array<\GoWest\Sectioncontent\Domain\Model\Content> contents
      */
     public function getContents()
     {
@@ -1168,14 +1185,14 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         // try to return the image from a previous call of this method
         if (is_array($this->txSectioncontentAbstractImage) && count($this->txSectioncontentAbstractImage)) {
           return $this->txSectioncontentAbstractImage;
-          
         }
         
-	$fileObjects = $this->fileRepository->findByRelation( ($this->overlayUid) ? 'pages_language_overlay' : 'pages', 'tx_sectioncontent_abstract_image', ($this->overlayUid) ? $this->overlayUid : $this->getUid() );
+        $fileObjects = $this->fileRepository->findByRelation('pages', 'tx_sectioncontent_abstract_image', $this->getUid() );
         
         if(!is_array($fileObjects) || empty($fileObjects) || !count($fileObjects)) {
             $fileObjects = $this->fileRepository->findByRelation( 'pages', 'tx_sectioncontent_abstract_image', $this->getUid() );
         }
+        
         foreach ( $fileObjects as $fileObject) {
             $originalFile = $fileObject->getOriginalFile()->getProperties();
             if (in_array( $originalFile['mime_type'], $this->_imageMimeTypes ) && $fileObject) {
@@ -1216,7 +1233,7 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
           
         }
         
-	$fileObjects = $this->fileRepository->findByRelation( ($this->overlayUid) ? 'pages_language_overlay' : 'pages', 'tx_sectioncontent_abstract_image_2', ($this->overlayUid) ? $this->overlayUid : $this->getUid() );
+        $fileObjects = $this->fileRepository->findByRelation( 'pages', 'tx_sectioncontent_abstract_image_2', $this->getUid() );
         
         if(!is_array($fileObjects) || empty($fileObjects) || !count($fileObjects)) {
             $fileObjects = $this->fileRepository->findByRelation( 'pages', 'tx_sectioncontent_abstract_image_2', $this->getUid() );
@@ -1226,7 +1243,7 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             if (in_array( $originalFile['mime_type'], $this->_imageMimeTypes ) && $fileObject) {
             
             
-                $this->txSectioncontentAbstractImage = array (
+                $this->txSectioncontentAbstractImage2 = array (
                         'reference' => $fileObject->getReferenceProperties(),
                         'originalResource' =>  $fileObject->getOriginalFile(),
                 );
@@ -1235,6 +1252,95 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         }
     
         return $this->txSectioncontentAbstractImage2;
+    }
+    
+    /**
+     * Setter for txSectioncontentAbstractImage3
+     *
+     * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference $txSectioncontentAbstractImage3
+     * @return void
+     */
+    public function setTxSectioncontentAbstractImage3(\TYPO3\CMS\Extbase\Domain\Model\FileReference $txSectioncontentAbstractImage3)
+    {
+        $this->txSectioncontentAbstractImage3 = $txSectioncontentAbstractImage3;
+    }
+
+    /**
+     * Getter for txSectioncontentAbstractImage3 (returns FileReference objects)
+     *
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference
+     */
+    public function getTxSectioncontentAbstractImage3()
+    {
+        // try to return the image from a previous call of this method
+        if (is_array($this->txSectioncontentAbstractImage3) && count($this->txSectioncontentAbstractImage3)) {
+          return $this->txSectioncontentAbstractImage3;
+          
+        }
+        
+        $fileObjects = $this->fileRepository->findByRelation( 'pages', 'tx_sectioncontent_abstract_image_3', $this->getUid() );
+        
+        if(!is_array($fileObjects) || empty($fileObjects) || !count($fileObjects)) {
+            $fileObjects = $this->fileRepository->findByRelation( 'pages', 'tx_sectioncontent_abstract_image_3', $this->getUid() );
+        }
+        foreach ( $fileObjects as $fileObject) {
+            $originalFile = $fileObject->getOriginalFile()->getProperties();
+            if (in_array( $originalFile['mime_type'], $this->_imageMimeTypes ) && $fileObject) {
+            
+            
+                $this->txSectioncontentAbstractImage3 = array (
+                        'reference' => $fileObject->getReferenceProperties(),
+                        'originalResource' =>  $fileObject->getOriginalFile(),
+                );
+                return $this->txSectioncontentAbstractImage3;
+            }
+        }
+    
+        return $this->txSectioncontentAbstractImage3;
+    }
+    
+    /**
+     * Setter for txSectioncontentAbstractImage4
+     *
+     * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference $txSectioncontentAbstractImage4
+     * @return void
+     */
+    public function setTxSectioncontentAbstractImage4(\TYPO3\CMS\Extbase\Domain\Model\FileReference $txSectioncontentAbstractImage4)
+    {
+        $this->txSectioncontentAbstractImage4 = $txSectioncontentAbstractImage4;
+    }
+
+    /**
+     * Getter for txSectioncontentAbstractImage4 (returns FileReference objects)
+     *
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference
+     */
+    public function getTxSectioncontentAbstractImage4()
+    {
+        // try to return the image from a previous call of this method
+        if (is_array($this->txSectioncontentAbstractImage4) && count($this->txSectioncontentAbstractImage4)) {
+          return $this->txSectioncontentAbstractImage4;
+        }
+        
+        $fileObjects = $this->fileRepository->findByRelation( 'pages', 'tx_sectioncontent_abstract_image_4', $this->getUid() );
+        
+        if(!is_array($fileObjects) || empty($fileObjects) || !count($fileObjects)) {
+            $fileObjects = $this->fileRepository->findByRelation( 'pages', 'tx_sectioncontent_abstract_image_4', $this->getUid() );
+        }
+        foreach ( $fileObjects as $fileObject) {
+            $originalFile = $fileObject->getOriginalFile()->getProperties();
+            if (in_array( $originalFile['mime_type'], $this->_imageMimeTypes ) && $fileObject) {
+            
+            
+                $this->txSectioncontentAbstractImage4 = array (
+                        'reference' => $fileObject->getReferenceProperties(),
+                        'originalResource' =>  $fileObject->getOriginalFile(),
+                );
+                return $this->txSectioncontentAbstractImage4;
+            }
+        }
+    
+        return $this->txSectioncontentAbstractImage4;
     }
 
     /**
