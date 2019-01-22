@@ -7,7 +7,7 @@ namespace GoWest\Sectioncontent\Domain\Repository;
  *  (c) 2011-2015 Armin Ruediger Vieweg <armin@v.ieweg.de>
  *                Tim Klein-Hitpass <tim.klein-hitpass@diemedialen.de>
  *                Kai Ratzeburg <kai.ratzeburg@diemedialen.de>
- *  (c) 2016      Michael Nuﬂbaumer <m.nussbaumer@go-west.at>
+ *  (c) 2016      Michael Nu√übaumer <m.nussbaumer@go-west.at>
  *
  *  All rights reserved
  *
@@ -212,6 +212,12 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function addCategoryConstraint(array $categories, $isAnd = true, $isNot = false)
     {
+        foreach($categories as $key => $category) {
+            if($category === NULL) {
+                unset($categories[$key]);
+            }
+        }
+        
         if ($isAnd === true && $isNot === false) {
             $this->queryConstraints[] = $this->query->logicalAnd($this->buildCategoryConstraint($categories));
         }
