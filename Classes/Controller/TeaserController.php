@@ -103,8 +103,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->currentPageUid = $GLOBALS['TSFE']->id;
 
         $this->performTemplatePathAndFilename();
-        #$this->setOrderingAndLimitation();
-        #$this->performPluginConfigurations();
+        $this->setOrderingAndLimitation();
+        $this->performPluginConfigurations();
 
         switch ($this->settings['source']) {
             default:
@@ -278,12 +278,28 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
         );
         
+        foreach($frameworkSettings['settings']['sourceCollection'] as $breakpointKey => $breakpointSettings) {
+            $this->sourceCollection[$breakpointKey] = $breakpointSettings;
+        }
+        
+        # Get SourceCollection settings from Typoscript if it isn't set
+        if(!$this->sourceCollection) {
+            foreach($GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_sectioncontent.']['settings.']['sourceCollection.'] as $breakpointKey => $breakpointSettings) {
+                $breakpointKey = preg_replace('#\.$#', '', $breakpointKey);
+                $this->sourceCollection[$breakpointKey] = $breakpointSettings;
+                
+            }
+            
+            $this->settings['sourceCollection'] = $this->sourceCollection;
+        }
+        
         ksort($frameworkSettings['view']['layoutRootPath']);
         ksort($frameworkSettings['view']['partialRootPath']);
         ksort($frameworkSettings['view']['templateRootPath']);
         
         $this->view->assign('contentObject', $this->configurationManager->getContentObject()->data);
         $this->view->assign('tsfe', array('page' => $GLOBALS['TSFE']->page));
+        $this->view->assign('sourceCollection', $this->sourceCollection);
         $templateType = $frameworkSettings['view']['templateType'];
         $templateFile = $frameworkSettings['view']['templateRootFile'];
         $layoutRootPathArr = $frameworkSettings['view']['layoutRootPath'];

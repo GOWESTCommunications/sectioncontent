@@ -6,76 +6,101 @@
 >
 
 <v:variable.set name="pageIMG" value=""></v:variable.set>
-<v:variable.set name="IMGCrop" value=""></v:variable.set>
-<v:variable.register.set name="pageIMG" value=""></v:variable.register.set>
-<v:variable.register.set name="IMGCrop" value=""></v:variable.register.set>
-    
-<f:if condition="{page.txSectioncontentAbstractImage}">
-    <f:if condition="{page.txSectioncontentAbstractImage.uid}">
-        <v:variable.set name="pageIMG" value="{page.txSectioncontentAbstractImage.uid}"></v:variable.set>
+<v:resource.record.fal as="mediaFirst" table="pages_language_overlay" field="tx_sectioncontent_abstract_image" uid="{page.overlayUid}">
+    <f:if condition="{mediaFirst.0}">
+         <v:variable.set name="pageIMG" value="{mediaFirst.0}"></v:variable.set>
     </f:if>
-    <f:if condition="{page.txSectioncontentAbstractImage.reference.uid}">
-        <v:variable.set name="pageIMG" value="{page.txSectioncontentAbstractImage.reference.uid}"></v:variable.set>
-    </f:if>
-    <f:if condition="{page.txSectioncontentAbstractImage.reference.crop}">
-        <v:variable.set name="IMGCrop" value="{page.txSectioncontentAbstractImage.reference.crop}"></v:variable.set>
-    </f:if>
-</f:if>
+</v:resource.record.fal>
 
-<f:if condition="{pageIMG} == '' && {page.txSectioncontentAbstractImage2}">
-    <f:if condition="{page.txSectioncontentAbstractImage2.uid}">
-        <v:variable.set name="pageIMG" value="{page.txSectioncontentAbstractImage2.uid}"></v:variable.set>
-    </f:if>
-    <f:if condition="{page.txSectioncontentAbstractImage2.reference.uid}">
-        <v:variable.set name="pageIMG" value="{page.txSectioncontentAbstractImage2.reference.uid}"></v:variable.set>
-    </f:if>
-    <f:if condition="{page.txSectioncontentAbstractImage2.reference.crop}">
-        <v:variable.set name="IMGCrop" value="{page.txSectioncontentAbstractImage2.reference.crop}"></v:variable.set>
-    </f:if>
-</f:if>
-
-<f:if condition="{pageIMG} == '' && {page.txSectioncontentAbstractImage3}">
-    <f:if condition="{page.txSectioncontentAbstractImage3.uid}">
-        <v:variable.set name="pageIMG" value="{page.txSectioncontentAbstractImage3.uid}"></v:variable.set>
-    </f:if>
-    <f:if condition="{page.txSectioncontentAbstractImage3.reference.uid}">
-        <v:variable.set name="pageIMG" value="{page.txSectioncontentAbstractImage3.reference.uid}"></v:variable.set>
-    </f:if>
-    <f:if condition="{page.txSectioncontentAbstractImage3.reference.crop}">
-        <v:variable.set name="IMGCrop" value="{page.txSectioncontentAbstractImage3.reference.crop}"></v:variable.set>
-    </f:if>
-</f:if>
-
-<f:if condition="{pageIMG} == '' && {page.txSectioncontentAbstractImage4}">
-    <f:if condition="{page.txSectioncontentAbstractImage4.uid}">
-        <v:variable.set name="pageIMG" value="{page.txSectioncontentAbstractImage4.uid}"></v:variable.set>
-    </f:if>
-    <f:if condition="{page.txSectioncontentAbstractImage4.reference.uid}">
-        <v:variable.set name="pageIMG" value="{page.txSectioncontentAbstractImage4.reference.uid}"></v:variable.set>
-    </f:if>
-    <f:if condition="{page.txSectioncontentAbstractImage4.reference.crop}">
-        <v:variable.set name="IMGCrop" value="{page.txSectioncontentAbstractImage4.reference.crop}"></v:variable.set>
-    </f:if>
-</f:if>
-
-<f:if condition="{pageIMG} == '' && {page.media}">
-    <f:for each="{page.media}" as="media">
-        <f:if condition="{pageIMG} == ''">
-            <f:if condition="{media.uid}">
-                <v:variable.set name="pageIMG" value="{media.uid}"></v:variable.set>
-            </f:if>
+<f:if condition="{pageIMG} == ''">
+    <v:resource.record.fal as="mediaFirst" table="pages_language_overlay" field="tx_sectioncontent_abstract_image_2" uid="{page.overlayUid}">
+        <f:if condition="{mediaFirst.0}">
+             <v:variable.set name="pageIMG" value="{mediaFirst.0}"></v:variable.set>
         </f:if>
-    </f:for>
+    </v:resource.record.fal>
 </f:if>
 
-<f:if condition="{pageIMG}">
-    <f:if condition="{pageIMG} != ''">
+<f:if condition="{pageIMG} == ''">
+    
+    <v:resource.record.fal as="mediaFirst" table="pages_language_overlay" field="media" uid="{page.overlayUid}">
+        <f:if condition="{mediaFirst.0}">
+             <v:variable.set name="pageIMG" value="{mediaFirst.0}"></v:variable.set>
+        </f:if>
+    </v:resource.record.fal>
+    
+    <f:if condition="{pageIMG} == ''">
+        <f:for each="{page.media}" as="media">
+            <f:if condition="{pageIMG} == ''">
+                <v:resource.record.fal as="mediaFirst" table="pages_language_overlay" field="media" uid="{media.uid}">
+                    <f:if condition="{mediaFirst.0}">
+                         <v:variable.set name="pageIMG" value="{mediaFirst.0}"></v:variable.set>
+                    </f:if>
+                </v:resource.record.fal>
+            </f:if>
+        </f:for>
+    </f:if>
+</f:if>
+
+<f:if condition="{pageIMG} == ''">
+    <v:resource.record.fal as="mediaFirst" table="pages" field="tx_sectioncontent_abstract_image" uid="{page.uid}">
+        <f:if condition="{mediaFirst.0}">
+             <v:variable.set name="pageIMG" value="{mediaFirst.0}"></v:variable.set>
+        </f:if>
+    </v:resource.record.fal>
+</f:if>
+
+<f:if condition="{pageIMG} == ''">
+    <v:resource.record.fal as="mediaFirst" table="pages" field="tx_sectioncontent_abstract_image_2" uid="{page.uid}">
+        <f:if condition="{mediaFirst.0}">
+             <v:variable.set name="pageIMG" value="{mediaFirst.0}"></v:variable.set>
+        </f:if>
+    </v:resource.record.fal>
+</f:if>
+
+<f:if condition="{pageIMG} == ''">
+    
+    <v:resource.record.fal as="mediaFirst" table="pages" field="media" uid="{page.uid}">
+        <f:if condition="{mediaFirst.0}">
+             <v:variable.set name="pageIMG" value="{mediaFirst.0}"></v:variable.set>
+        </f:if>
+    </v:resource.record.fal>
+    
+    <f:if condition="{pageIMG} == ''">
+        <f:for each="{page.media}" as="media">
+            <f:if condition="{pageIMG} == ''">
+                <v:resource.record.fal as="mediaFirst" table="pages" field="media" uid="{media.uid}">
+                    <f:if condition="{mediaFirst.0}">
+                         <v:variable.set name="pageIMG" value="{mediaFirst.0}"></v:variable.set>
+                    </f:if>
+                </v:resource.record.fal>
+            </f:if>
+        </f:for>
+    </f:if>
+</f:if>
+
+<f:if condition="{pageIMG} == ''">
+    <f:if condition="{page.contents}">
+        <f:then>
+            <f:for each="{page.contents}" as="content">
+                <f:if condition="{content.assets}">
+                    <f:then>
+                        <v:resource.record.fal as="mediaFirst" table="tt_content" field="assets" uid="{content.uid}">
+                            <f:if condition="{mediaFirst.0}">
+                                 <v:variable.set name="pageIMG" value="{mediaFirst.0}"></v:variable.set>
+                            </f:if>
+                        </v:resource.record.fal>
+                    </f:then>
+                </f:if>
+            </f:for>
+        </f:then>
+    </f:if>
+</f:if>
+
+<f:if condition="{pageIMG} != ''">
         <v:variable.register.set name="pageIMG" value="{pageIMG}"></v:variable.register.set>
-    </f:if>
-    <f:if condition="{IMGCrop} != ''">
-        <v:variable.register.set name="IMGCrop" value="{IMGCrop}"></v:variable.register.set>
-    </f:if>
 </f:if>
-
-           
+<f:if condition="{IMGCrop} == ''">
+    <v:variable.register.set name="IMGCrop" value="{pageIMG.crop}"></v:variable.register.set>
+</f:if>
+            
 </html>
