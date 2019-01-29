@@ -103,8 +103,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->currentPageUid = $GLOBALS['TSFE']->id;
 
         $this->performTemplatePathAndFilename();
-        #$this->setOrderingAndLimitation();
-        #$this->performPluginConfigurations();
+        $this->setOrderingAndLimitation();
+        $this->performPluginConfigurations();
 
         switch ($this->settings['source']) {
             default:
