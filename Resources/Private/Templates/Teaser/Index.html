@@ -4,7 +4,7 @@
     xmlns:sectioncontent="http://typo3.org/ns/GoWest/Sectioncontent/ViewHelpers"
     data-namespace-typo3-fluid="true"
 >
-<f:layout name="Default" />
+<f:layout name="None" />
 
 <f:section name="main">
     <f:if condition="{settings.jsFiltertype}">
@@ -21,7 +21,7 @@
             };
         </script>
     </f:if>
-    <div class="overview">
+    <div class="row">
     <f:if condition="{f:count(subject:'{pages}')}">
         <f:then>
                 <f:for each="{pages}" as="page">
@@ -30,19 +30,19 @@
                         <v:variable.set name="catIds" value="{catIds} {cat.uid}"></v:variable.set>
                     </f:for>
                     <div class="col-sm-6 col-md-4 overviewItem<f:if condition="{settings.jsFiltertype}"> filterElement</f:if>" data-categories="{catIds}">
-                        <figure class="{settings.hoverEffect}">
-                            <f:render partial="SectioncontentImage" arguments="{_all}"/>
-                            
-                            <v:variable.set name="pageIMG" value=""></v:variable.set>
-                            <v:variable.set name="IMGCrop" value=""></v:variable.set>
-                            
-                            <f:if condition="{v:variable.register.get(name: 'IMGCrop')}">
-                                <v:variable.set name="IMGCrop" value="{v:variable.register.get(name: 'IMGCrop')}"></v:variable.set>
-                            </f:if>
-                            
-                            <f:if condition="{v:variable.register.get(name: 'pageIMG')}">
+                        <article>
+                            <div class="image">
+                                <f:render partial="SectioncontentImage" arguments="{_all}"/>
+                                
+                                <v:variable.set name="pageIMG" value=""></v:variable.set>
+                                <v:variable.set name="IMGCrop" value=""></v:variable.set>
+                                
+                                <f:if condition="{v:variable.register.get(name: 'IMGCrop')}">
+                                    <v:variable.set name="IMGCrop" value="{v:variable.register.get(name: 'IMGCrop')}"></v:variable.set>
+                                </f:if>
+                                
+                                <f:if condition="{v:variable.register.get(name: 'pageIMG')}">
                                     <v:variable.set name="pageIMG" value="{v:variable.register.get(name: 'pageIMG')}"></v:variable.set>
-                                    
                                     
                                     <picture>
                                         <!--[if IE 9]><video style="display: none;"><![endif]-->
@@ -54,31 +54,28 @@
                                         <!--[if IE 9]></video><![endif]-->
                                         <img src="{f:uri.image(src: pageIMG, treatIdAsReference: 1, width: '420', height: '320c', crop: IMGCrop, cropVariant: 'md')}" alt="{pageIMG.alternative}">
                                     </picture>
-                            </f:if>
-                            
-                            
-                            <figcaption>
-                                <div>
-                                    <h2>
-                                        <f:if condition="{page.txSectioncontentAbstractTitle}">
-                                            
-                                                <f:then><f:format.crop maxCharacters="20">{page.txSectioncontentAbstractTitle}</f:format.crop></f:then>
+                                </f:if>
+                            </div>
+                            <div class="text">
+                                <div class="inner">
+                                    <header>
+                                        <h2>
+                                            <f:if condition="{page.txSectioncontentAbstractTitle}">
+                                                <f:then><f:format.crop maxCharacters="120">{page.txSectioncontentAbstractTitle}</f:format.crop></f:then>
                                                 <f:else>
                                                     <f:if condition="{page.navTitle}">
-                                                        <f:then><f:format.crop maxCharacters="20">{page.navTitle}</f:format.crop></f:then>
-                                                        <f:else><f:format.crop maxCharacters="20">{page.title}</f:format.crop></f:else>
+                                                        <f:then><f:format.crop maxCharacters="120">{page.navTitle}</f:format.crop></f:then>
+                                                        <f:else><f:format.crop maxCharacters="120">{page.title}</f:format.crop></f:else>
                                                     </f:if>
                                                 </f:else>
-                                            
-                                        </f:if>
-                                    </h2>
+                                            </f:if>
+                                        </h2>
+                                    </header>
                                     <p class="description"><f:format.nl2br><f:format.crop maxCharacters="80">{page.txSectioncontentAbstractDescription}</f:format.crop></f:format.nl2br></p>
                                 </div>
-                                <f:link.page class="section " pageUid="{page.uid}">
-                                    <f:translate key="LLL:{templatedir}Resources/Private/Language/locallang.xlf:gowest.readmore" />
-                                </f:link.page>
-                            </figcaption>            
-                        </figure>
+                            </div>
+                            <f:link.typolink parameter="{page.uid}"></f:link.typolink>
+                        </article>
                     </div>
                 </f:for>
         </f:then>
