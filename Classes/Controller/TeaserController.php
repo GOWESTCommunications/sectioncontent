@@ -312,13 +312,17 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         
         
         foreach($templateRootPathArr as $templateRootPath) {
-            if ($templateType === 'directory' && !empty($templateRootPath) && file_exists(str_replace('//', '/', PATH_site . $templateRootPath . '/' . $controllerAction . '.html'))) {
-                $this->view->setTemplatePathAndFilename(str_replace('//', '/', $templateRootPath . '/' . $controllerAction . '.html'));
+            
+            
+            $fileName =  GeneralUtility::getFileAbsFileName(str_replace('//', '/', $templateRootPath . '/' . $controllerAction . '.html'));
+            
+            if ($templateType === 'directory' && !empty($templateRootPath) && file_exists($fileName)) {
+                $this->view->setTemplatePathAndFilename($fileName);
                 return true;
             }
         
-            if (!empty($templateRootPath) && file_exists(str_replace('//', '/', PATH_site . $templateRootPath . '/' . $controllerAction . '.html'))) {
-                $this->view->setTemplatePathAndFilename(str_replace('//', '/', $templateRootPath . '/' . $controllerAction . '.html'));
+            if (!empty($templateRootPath) && file_exists($fileName)) {
+                $this->view->setTemplatePathAndFilename($fileName);
                 return true;
             }
         }
