@@ -92,7 +92,7 @@ $temporaryColumns = array(
                         ],
                     ],
                 ),
-                'jpg,jpeg,png'
+                'jpg,jpeg,png,svg'
             ),
         ),
         'tx_sectioncontent_abstract_image_2' => array(
@@ -129,7 +129,7 @@ $temporaryColumns = array(
                         ],
                     ],
                 ),
-                'jpg,jpeg,png'
+                'jpg,jpeg,png,svg'
             ),
         ),
         'tx_sectioncontent_abstract_image_3' => array(
@@ -166,7 +166,7 @@ $temporaryColumns = array(
                         ],
                     ],
                 ),
-                'jpg,jpeg,png'
+                'jpg,jpeg,png,svg'
             ),
         ),
         'tx_sectioncontent_abstract_image_4' => array(
@@ -203,7 +203,7 @@ $temporaryColumns = array(
                         ],
                     ],
                 ),
-                'jpg,jpeg,png'
+                'jpg,jpeg,png,svg'
             ),
         ),
         'tx_sectioncontent_abstract_reference_url' => array(
