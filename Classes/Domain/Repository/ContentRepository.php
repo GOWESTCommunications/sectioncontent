@@ -67,11 +67,7 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         
         $query->matching(
             $query->logicalAnd(
-                $query->equals('pid', $pid),
-                $query->logicalOr(
-                            $query->equals('tx_gridelements_container', '0'),
-                            $query->equals('tx_gridelements_container', '-1')
-                )
+                $query->equals('pid', $pid)
             )
         );
         
@@ -91,29 +87,34 @@ class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     
     protected function getChildContent($contentElements) {
         $orderedArray = array();
+        $newContentElements = [];
         foreach($contentElements as $ce) {
-            if($ce->getCtype() == 'gridelements_pi1') {
-                $query = $this->createQuery();
-                $query->matching(
-                    $query->logicalAnd(
-                        $query->equals('pid', $ce->getPid()),
-                        $query->equals('tx_gridelements_container', $ce->getUid())
-                    )
-                );
-                $query->setOrderings(array(
-                    'tx_gridelements_columns' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
-                    'sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
-                ));
-                
-                $childContent = $query->execute();
-                $childContent = $this->getChildContent($childContent);
-                $ce->setChildContent($childContent);
+            $newContentElements[$ce->getUid()] = $ce;
+        }
+        
+        foreach($newContentElements as $ce) {
+            $colPosList = [
+                $ce->getUid() . '10',
+                $ce->getUid() . '20',
+                $ce->getUid() . '30',
+                $ce->getUid() . '40',
+                $ce->getUid() . '50',
+            ];
+            $childContent = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+            $hasChildContent = false;
+            foreach($newContentElements as $ceChild) {
+                if(in_array($ceChild->getColPos(), $colPosList)) {
+                    $hasChildContent = true;
+                    $childContent->attach($ceChild);
+                    unset($newContentElements[$ceChild->getUid()]);
+                }
+            }
+            if($hasChildContent) {
+                $newContentElements[$ce->getUid()]->setChildContent($childContent);
             }
         }
         
-        
-        
-        return $contentElements;
+        return $newContentElements;
     }
 
     /**
