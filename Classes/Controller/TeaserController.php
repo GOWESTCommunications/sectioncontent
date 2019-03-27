@@ -277,10 +277,15 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $frameworkSettings = $this->configurationManager->getConfiguration(
             \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
         );
-        
-        ksort($frameworkSettings['view']['layoutRootPath']);
-        ksort($frameworkSettings['view']['partialRootPath']);
-        ksort($frameworkSettings['view']['templateRootPath']);
+        if(is_array($frameworkSettings['view']['templateRootPath'])) {
+            ksort($frameworkSettings['view']['layoutRootPath']);
+        }
+        if(is_array($frameworkSettings['view']['templateRootPath'])) {
+            ksort($frameworkSettings['view']['partialRootPath']);
+        }
+        if(is_array($frameworkSettings['view']['templateRootPath'])) {
+            ksort($frameworkSettings['view']['templateRootPath']);
+        }
         
         $this->view->assign('contentObject', $this->configurationManager->getContentObject()->data);
         $this->view->assign('tsfe', array('page' => $GLOBALS['TSFE']->page));
@@ -295,10 +300,11 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         
         $partialRootPathPossible = [];
         foreach($partialRootPathArr as $partialRootPath) {
-            if ($partialRootPath != null && !empty($partialRootPath) && file_exists(PATH_site . $partialRootPath)) {
+            if ($partialRootPath != null && !empty($partialRootPath) && file_exists(GeneralUtility::getFileAbsFileName($partialRootPath))) {
                 $partialRootPathPossible[] = $partialRootPath;
             }
         }
+        
         if(count($partialRootPathPossible)) {
             $this->view->setPartialRootPaths($partialRootPathPossible);
         }

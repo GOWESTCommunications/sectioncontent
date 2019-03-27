@@ -1,12 +1,15 @@
 plugin.tx_sectioncontent {
     view {
         templateRootPath {
+            10 = EXT:sectioncontent/Resources/Private/Templates/
             200 = {$plugin.tx_sectioncontent.view.templateRootPath}
         }
         partialRootPath {
+            10 = EXT:sectioncontent/Resources/Private/Partials/
             200 = {$plugin.tx_sectioncontent.view.partialRootPath}
         }
         layoutRootPath {
+            10 = EXT:sectioncontent/Resources/Private/Layouts/
             200 = {$plugin.tx_sectioncontent.view.layoutRootPath}
         }
     }
