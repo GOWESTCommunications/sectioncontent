@@ -541,7 +541,7 @@
 							</config>
 						</TCEforms>
 					</view.templateRootPath.10>
-					<view.partialRootPath.10>
+					<view.partialRootPath.300>
 						<TCEforms>
 							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:partialRootPath</label>
 							<config>
@@ -550,8 +550,8 @@
 								<default></default>
 							</config>
 						</TCEforms>
-					</view.partialRootPath.10>
-					<view.layoutRootPath.10>
+					</view.partialRootPath.300>
+					<view.layoutRootPath.300>
 						<TCEforms>
 							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:layoutRootPath</label>
 							<config>
@@ -560,7 +560,7 @@
 								<default></default>
 							</config>
 						</TCEforms>
-					</view.layoutRootPath.10>
+					</view.layoutRootPath.300>
 				</el>
 			</ROOT>
 		</tempaltesheet>
