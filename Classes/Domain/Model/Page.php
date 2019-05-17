@@ -1165,13 +1165,7 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getTxSectioncontentAbstractImage()
     {
-        // try to return the image from a previous call of this method
-        if (is_array($this->txSectioncontentAbstractImage) && count($this->txSectioncontentAbstractImage)) {
-          return $this->txSectioncontentAbstractImage;
-          
-        }
-        
-	$fileObjects = $this->fileRepository->findByRelation( ($this->overlayUid) ? 'pages_language_overlay' : 'pages', 'tx_sectioncontent_abstract_image', ($this->overlayUid) ? $this->overlayUid : $this->getUid() );
+        $fileObjects = $this->fileRepository->findByRelation('pages', 'tx_sectioncontent_abstract_image', $this->getUid() );
         
         if(!is_array($fileObjects) || empty($fileObjects) || !count($fileObjects)) {
             $fileObjects = $this->fileRepository->findByRelation( 'pages', 'tx_sectioncontent_abstract_image', $this->getUid() );
@@ -1210,13 +1204,7 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getTxSectioncontentAbstractImage2()
     {
-        // try to return the image from a previous call of this method
-        if (is_array($this->txSectioncontentAbstractImage2) && count($this->txSectioncontentAbstractImage2)) {
-          return $this->txSectioncontentAbstractImage2;
-          
-        }
-        
-	$fileObjects = $this->fileRepository->findByRelation( ($this->overlayUid) ? 'pages_language_overlay' : 'pages', 'tx_sectioncontent_abstract_image_2', ($this->overlayUid) ? $this->overlayUid : $this->getUid() );
+        $fileObjects = $this->fileRepository->findByRelation('pages', 'tx_sectioncontent_abstract_image_2', $this->getUid() );
         
         if(!is_array($fileObjects) || empty($fileObjects) || !count($fileObjects)) {
             $fileObjects = $this->fileRepository->findByRelation( 'pages', 'tx_sectioncontent_abstract_image_2', $this->getUid() );
