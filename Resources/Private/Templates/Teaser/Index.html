@@ -32,18 +32,11 @@
                     <div class="col-sm-6 col-md-4 overviewItem<f:if condition="{settings.jsFiltertype}"> filterElement</f:if>" data-categories="{catIds}">
                         <article>
                             <div class="image">
-                                <f:render partial="SectioncontentImage" arguments="{_all}"/>
+                               
+                                <v:variable.set name="pageIMG" value="{page.teaserImg.pageIMG}"></v:variable.set>
+                                <v:variable.set name="IMGCrop" value="{page.teaserImg.crop}"></v:variable.set>
                                 
-                                <v:variable.set name="pageIMG" value=""></v:variable.set>
-                                <v:variable.set name="IMGCrop" value=""></v:variable.set>
-                                
-                                <f:if condition="{v:variable.register.get(name: 'IMGCrop')}">
-                                    <v:variable.set name="IMGCrop" value="{v:variable.register.get(name: 'IMGCrop')}"></v:variable.set>
-                                </f:if>
-                                
-                                <f:if condition="{v:variable.register.get(name: 'pageIMG')}">
-                                    <v:variable.set name="pageIMG" value="{v:variable.register.get(name: 'pageIMG')}"></v:variable.set>
-                                    
+                                <f:if condition="{pageIMG}">
                                     <picture>
                                         <!--[if IE 9]><video style="display: none;"><![endif]-->
                                         <source srcset="{f:uri.image(src: pageIMG, treatIdAsReference: 1, width: '730', height: '547c', crop: IMGCrop, cropVariant: 'xs')}" media="(max-width: 767px)" >

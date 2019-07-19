@@ -269,7 +269,8 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $queryResult = $query->execute();
         $this->resetQuery();
 
-        $queryResult = $this->handlePageLocalization($queryResult);
+        #$queryResult = $this->handlePageLocalization($queryResult);
+        $queryResult = $queryResult->toArray();
         return $queryResult;
     }
 

@@ -132,6 +132,7 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * media
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
     protected $media;
 
@@ -202,6 +203,7 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * contents
      *
      * @var array<\GoWest\Sectioncontent\Domain\Model\Content>
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
     protected $contents;
 
@@ -209,6 +211,7 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Categories
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\Category>
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
     protected $categories;
 
@@ -221,8 +224,14 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * Child pages
      *
      * @var array<Page>
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
     protected $childPages = array();
+    
+    /**
+     * @var array<mixed>
+     */
+    protected $teaserImg = [];
 
     /**
      * Custom Attributes
@@ -279,6 +288,7 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * abstract image
      *
      * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
     protected $txSectioncontentAbstractImage;
 
@@ -286,6 +296,7 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * abstract image 2
      *
      * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
     protected $txSectioncontentAbstractImage2;
     
@@ -745,6 +756,7 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             /** @var \TYPO3\CMS\Extbase\Domain\Model\FileReference $medium */
             foreach ($this->getMedia() as $medium) {
                 $mediaFiles[] = $medium->getOriginalResource()->toArray();
+                
             }
         }
         return $mediaFiles;
@@ -1179,10 +1191,17 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
                         'reference' => $fileObject->getReferenceProperties(),
                         'originalResource' =>  $fileObject->getOriginalFile(),
                 );
+                
+                $this->txSectioncontentAbstractImage['pageIMG'] = $this->txSectioncontentAbstractImage['reference']['uid'];
+                $this->txSectioncontentAbstractImage['crop'] = $this->txSectioncontentAbstractImage['reference']['crop'] ? $this->txSectioncontentAbstractImage['reference']['crop'] : '';
                 return $this->txSectioncontentAbstractImage;
             }
         }
-    
+        
+        if($this->txSectioncontentAbstractImage) {
+            $this->txSectioncontentAbstractImage['pageIMG'] = $this->txSectioncontentAbstractImage->getUid();
+            $this->txSectioncontentAbstractImage['crop'] = $this->txSectioncontentAbstractImage['reference']['crop'] ? $this->txSectioncontentAbstractImage['reference']['crop'] : '';
+        }
         return $this->txSectioncontentAbstractImage;
     }
     
@@ -1214,14 +1233,21 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             if (in_array( $originalFile['mime_type'], $this->_imageMimeTypes ) && $fileObject) {
             
             
-                $this->txSectioncontentAbstractImage = array (
+                $this->txSectioncontentAbstractImage2 = array (
                         'reference' => $fileObject->getReferenceProperties(),
                         'originalResource' =>  $fileObject->getOriginalFile(),
                 );
+                
+                $this->txSectioncontentAbstractImage2['pageIMG'] = $this->txSectioncontentAbstractImage2['reference']['uid'];
+                $this->txSectioncontentAbstractImage2['crop'] = $this->txSectioncontentAbstractImage2['reference']['crop'] ? $this->txSectioncontentAbstractImage2['reference']['crop'] : '';
                 return $this->txSectioncontentAbstractImage2;
             }
         }
-    
+        
+        if($this->txSectioncontentAbstractImage2) {
+            $this->txSectioncontentAbstractImage2['pageIMG'] = $this->txSectioncontentAbstractImage2->getUid();
+            $this->txSectioncontentAbstractImage2['crop'] = $this->txSectioncontentAbstractImage2['reference']['crop'] ? $this->txSectioncontentAbstractImage2['reference']['crop'] : '';
+        }
         return $this->txSectioncontentAbstractImage2;
     }
 
@@ -1435,6 +1461,51 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getSysLanguageUid()
     {
         return $this->sysLanguageUid;
+    }
+    
+    /**
+     * Getter for teaser image
+     *
+     * @return array
+     */
+    public function getTeaserImg()
+    {
+        if(count($this->teaserImg) === 0) {
+            $teaserImg = $this->getTxSectioncontentAbstractImage();
+            if(!$teaserImg) {
+                $teaserImg = $this->getTxSectioncontentAbstractImage2();
+            }
+            if(!$teaserImg) {
+                $teaserImgs = $this->getMedia();
+                foreach($teaserImgs as $img) {
+                    if(!$teaserImg) {
+                        $teaserImg = $img;
+                        $teaserImg = array (
+                                'reference' => $teaserImg->getOriginalResource()->getReferenceProperties(),
+                                'originalResource' =>  $teaserImg->getOriginalResource(),
+                        );
+                
+                        $teaserImg['pageIMG'] = $teaserImg['reference']['uid'];
+                        $teaserImg['crop'] = $teaserImg['reference']['crop'] ? $teaserImg['reference']['crop'] : '';
+                    }
+                }
+            }
+            
+            $this->teaserImg = $teaserImg;
+        }
+        
+        return $this->teaserImg;
+    }
+
+    /**
+     * Setter for child pages
+     *
+     * @param array $teaserImg
+     * @return void
+     */
+    public function setTeaserImg(array $teaserImg)
+    {
+        $this->teaserImg = $teaserImg;
     }
     
     
