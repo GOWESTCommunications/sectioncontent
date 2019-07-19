@@ -1470,6 +1470,7 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getTeaserImg()
     {
+        
         if(count($this->teaserImg) === 0) {
             $teaserImg = $this->getTxSectioncontentAbstractImage();
             if(!$teaserImg) {
@@ -1491,7 +1492,10 @@ class Page extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
                 }
             }
             
-            $this->teaserImg = $teaserImg;
+            if($teaserImg) {
+                $this->teaserImg = $teaserImg;
+            }
+            
         }
         
         return $this->teaserImg;
