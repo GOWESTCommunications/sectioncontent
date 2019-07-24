@@ -105,7 +105,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->performTemplatePathAndFilename();
         $this->setOrderingAndLimitation();
         $this->performPluginConfigurations();
-
+        
         switch ($this->settings['source']) {
             default:
             case 'thisChildren':

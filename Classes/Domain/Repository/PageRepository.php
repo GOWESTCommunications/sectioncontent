@@ -79,6 +79,10 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function initializeObject()
     {
+        
+        $languageAspect = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class)->getAspect('language');
+        $this->sys_language_uid = $languageAspect->getId();
+        
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\QuerySettingsInterface $querySettings */
         $querySettings = $this->objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\QuerySettingsInterface');
         $querySettings->setRespectStoragePage(false);
@@ -122,9 +126,21 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function findByPidList($pidlist, $orderByPlugin = false)
     {
         $pagePids = GeneralUtility::intExplode(',', $pidlist, true);
-
         $query = $this->query;
-        $this->addQueryConstraint($query->in('uid', $pagePids));
+        
+        if($this->sys_language_uid === 0) {
+            $this->addQueryConstraint($query->in('uid', $pagePids));
+        } else {
+            
+            $contraints = [];
+            
+            $contraints[] = $query->in('uid', $pagePids);
+            $contraints[] = $query->in('l10n_parent', $pagePids);
+            
+            
+            $this->queryConstraints[] = $this->query->logicalOr($contraints);
+        }
+        
         $query->matching($query->logicalAnd($this->queryConstraints));
 
         if ($orderByPlugin == false) {
@@ -134,6 +150,9 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             return $this->handlePageLocalization($results);
         } else {
             $results = $query->execute();
+            
+            
+            
             $this->resetQuery();
             return $this->orderByPlugin($pagePids, $this->handlePageLocalization($results));
         }
@@ -185,10 +204,16 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function findChildrenRecursivelyByPidList($pidlist, $recursionDepthFrom, $recursionDepth)
     {
-        
-        
         $pagePids = $this->getRecursivePageList($pidlist, $recursionDepthFrom, $recursionDepth);
-        $this->addQueryConstraint($this->query->in(($recursionDepthFrom === 0) ? 'pid' : 'uid', $pagePids));
+        
+        if($this->sys_language_uid === 0) {
+            $this->addQueryConstraint($this->query->in(($recursionDepthFrom === 0) ? 'pid' : 'uid', $pagePids));
+        } else {
+            $contraints = [];
+            $contraints[] = $this->query->in('uid', $pagePids);
+            $contraints[] = $this->query->in('l10n_parent', $pagePids);
+            $this->queryConstraints[] = $this->query->logicalOr($contraints);
+        }
         
         $result = $this->executeQuery();
         
@@ -265,12 +290,10 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->query;
         $query->matching($query->logicalAnd($this->queryConstraints));
         $this->handleOrdering($query);
-
         $queryResult = $query->execute();
         $this->resetQuery();
 
-        #$queryResult = $this->handlePageLocalization($queryResult);
-        $queryResult = $queryResult->toArray();
+        $queryResult = $this->handlePageLocalization($queryResult);
         return $queryResult;
     }
 
@@ -282,67 +305,7 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     protected function handlePageLocalization(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $pages)
     {
-        
-        
-        $currentLangUid = (int)$GLOBALS['TSFE']->sys_page->sys_language_uid;
-        $displayedPages = array();
-        /** @var Page $page */
-        foreach ($pages as $page) {
-            
-            
-            $displayedPages[] = $page;
-            /*
-            if ($currentLangUid === 0) {
-                if ($page->getL18nConfiguration() !== Page::L18N_HIDE_DEFAULT_LANGUAGE &&
-                    $page->getL18nConfiguration() !== Page::L18N_HIDE_ALWAYS_BUT_TRANSLATION_EXISTS) {
-                    $displayedPages[] = $page;
-                }
-            } else {
-                
-                $pageSelect = $GLOBALS['TSFE']->sys_page;
-                $pageRowWithOverlays = $pageSelect->getPage($page->getUid());
-                
-                $page->setSysLanguageUid($currentLangUid);
-                
-                $fallbackLangUid = $currentLangUid;
-                if(method_exists('\AOE\Languagevisibility\Services\FeServices', 'getFallbackOrderForElement')) {
-                    $table = ($currentLangUid > 0) ? 'pages' : 'pages';
-                    $fallbackLangUid = \AOE\Languagevisibility\Services\FeServices::getOverlayLanguageIdForElementRecord($page->getUid(), $table, $currentLangUid);
-                }
-                
-                if ((boolean)$GLOBALS['TYPO3_CONF_VARS']['FE']['hidePagesIfNotTranslatedByDefault'] === false) {
-                    if (!($page->getL18nConfiguration() === Page::L18N_HIDE_IF_NO_TRANSLATION_EXISTS ||
-                            $page->getL18nConfiguration() === Page::L18N_HIDE_ALWAYS_BUT_TRANSLATION_EXISTS) ||
-                        isset($pageRowWithOverlays['_PAGES_OVERLAY'])) {
-                    
-                        $pageArr = ((string)$fallbackLangUid == '0') ? $pageRowWithOverlays : $page->getUid();
-                        $pageArr = $pageSelect->getPageOverlay($pageArr, $currentLangUid);
-                        
-                        if(is_array($pageArr) && !empty($pageArr)) {
-                            $page->setOverlayUid($pageArr['_PAGES_OVERLAY_UID']);
-                            $displayedPages[] = $page;
-                        }
-                    }
-                } else {
-                    if (($page->getL18nConfiguration() === Page::L18N_HIDE_IF_NO_TRANSLATION_EXISTS ||
-                            $page->getL18nConfiguration() === Page::L18N_HIDE_ALWAYS_BUT_TRANSLATION_EXISTS) &&
-                        !isset($pageRowWithOverlays['_PAGES_OVERLAY']) ||
-                        isset($pageRowWithOverlays['_PAGES_OVERLAY'])) {
-                        
-                        $pageArr = ((string)$fallbackLangUid == '0') ? $pageRowWithOverlays : $page->getUid();
-                        $pageArr = $pageSelect->getPageOverlay($pageArr, $currentLangUid);
-                        
-                        if(is_array($pageArr) && !empty($pageArr)) {
-                            $page->setOverlayUid($pageArr['_PAGES_OVERLAY_UID']);
-                            $displayedPages[] = $page;
-                        }
-                    }
-                }
-            }
-            */
-        }
-        
-        return $displayedPages;
+        return $pages->toArray();
     }
 
     /**
@@ -463,7 +426,18 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      */
     public function setIgnoreOfUid($currentPageUid)
     {
-        $this->addQueryConstraint($this->query->logicalNot($this->query->equals('uid', $currentPageUid)));
+        if($this->sys_language_uid === 0) {
+            $this->addQueryConstraint($this->query->logicalNot($this->query->equals('uid', $currentPageUid)));
+        } else {
+            
+            $contraints = [];
+            
+            $contraints[] = $this->query->equals('uid', $currentPageUid);
+            $contraints[] = $this->query->equals('l10n_parent', $currentPageUid);
+            
+            
+            $this->queryConstraints[] = $this->query->logicalNot($this->query->logicalOr($contraints));
+        }
     }
 
     /**
