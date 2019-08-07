@@ -46,6 +46,10 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     const CATEGORY_MODE_OR_NOT = 3;
     /** Category Mode: And Not */
     const CATEGORY_MODE_AND_NOT = 4;
+    /** Category Mode: Current Page Categories And */
+    const CATEGORY_MODE_CURRENT_AND = 5;
+    /** Category Mode: Current Page Categories Or */
+    const CATEGORY_MODE_CURRENT_OR = 6;
 
     /**
      * page attribute to order by
@@ -246,7 +250,8 @@ class PageRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 unset($categories[$key]);
             }
         }
-        
+
+
         if ($isAnd === true && $isNot === false) {
             $this->queryConstraints[] = $this->query->logicalAnd($this->buildCategoryConstraint($categories));
         }

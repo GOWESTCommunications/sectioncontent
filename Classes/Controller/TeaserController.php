@@ -7,7 +7,7 @@ namespace GoWest\Sectioncontent\Controller;
  *  (c) 2011-2015 Armin Ruediger Vieweg <armin@v.ieweg.de>
  *                Tim Klein-Hitpass <tim.klein-hitpass@diemedialen.de>
  *                Kai Ratzeburg <kai.ratzeburg@diemedialen.de>
- *  (c) 2016      Michael Nußbaumer <m.nussbaumer@go-west.at>
+ *  (c) 2016      Michael Nuï¿½baumer <m.nussbaumer@go-west.at>
  *
  *  All rights reserved
  *
@@ -41,7 +41,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     /**
      * @var array
      */
-    protected $settings = array();
+    protected $settings = [];
 
     /**
      * @var integer
@@ -366,6 +366,22 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             array_map(array($this->pageRepository, 'setIgnoreOfUid'), $ignoringUids);
         }
 
+
+        if(
+            (int)$this->settings['categoryMode'] == \GoWest\Sectioncontent\Domain\Repository\PageRepository::CATEGORY_MODE_CURRENT_AND
+            || (int)$this->settings['categoryMode'] == \GoWest\Sectioncontent\Domain\Repository\PageRepository::CATEGORY_MODE_CURRENT_OR
+        ) {
+            $pageCategories = $this->pageRepository->findByUid($GLOBALS['TSFE']->id)->getCategories()->toArray();
+
+            $categoryList = [];
+            foreach ($pageCategories as $pageCategory) {
+                $categoryList[] = $pageCategory->getUid();
+            }
+            $this->settings['categoriesList'] = implode(',', $categoryList);
+        }
+
+
+
         if ($this->settings['categoriesList'] && $this->settings['categoryMode']) {
             $categories = array();
             foreach (GeneralUtility::intExplode(',', $this->settings['categoriesList'], true) as $categoryUid) {
@@ -375,6 +391,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             switch ((int)$this->settings['categoryMode']) {
                 case \GoWest\Sectioncontent\Domain\Repository\PageRepository::CATEGORY_MODE_OR:
                 case \GoWest\Sectioncontent\Domain\Repository\PageRepository::CATEGORY_MODE_OR_NOT:
+                case \GoWest\Sectioncontent\Domain\Repository\PageRepository::CATEGORY_MODE_CURRENT_OR:
                     $isAnd = false;
                     break;
                 default:
