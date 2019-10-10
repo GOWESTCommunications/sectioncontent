@@ -464,7 +464,7 @@
 					<settings.categoriesList>
 						<TCEforms>
 							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:categories</label>
-							<displayCond>FIELD:settings.categoryMode:IN:1,2,3,4</displayCond>
+							<displayCond>FIELD:settings.categoryMode:IN:1,2,3,4,5,6</displayCond>
 							<config>
 								<type>select</type>
 								<autoSizeMax>50</autoSizeMax>

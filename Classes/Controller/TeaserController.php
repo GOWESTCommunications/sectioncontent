@@ -371,12 +371,17 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             (int)$this->settings['categoryMode'] == \GoWest\Sectioncontent\Domain\Repository\PageRepository::CATEGORY_MODE_CURRENT_AND
             || (int)$this->settings['categoryMode'] == \GoWest\Sectioncontent\Domain\Repository\PageRepository::CATEGORY_MODE_CURRENT_OR
         ) {
+            $filterCategories = GeneralUtility::trimExplode(',', $this->settings['categoriesList'], true);
             $pageCategories = $this->pageRepository->findByUid($GLOBALS['TSFE']->id)->getCategories()->toArray();
-
+            
             $categoryList = [];
             foreach ($pageCategories as $pageCategory) {
-                $categoryList[] = $pageCategory->getUid();
+                if(!is_array($filterCategories) || count($filterCategories) == 0 || in_array($pageCategory->getUid(), $filterCategories)) {
+                    $categoryList[] = $pageCategory->getUid();
+                }
+                
             }
+            
             $this->settings['categoriesList'] = implode(',', $categoryList);
         }
 
