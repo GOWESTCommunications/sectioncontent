@@ -1,4 +1,5 @@
 <?php
+
 namespace GoWest\Sectioncontent\Utility;
 
 /***************************************************************
@@ -41,7 +42,7 @@ class Settings
 
     /**
      * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $configurationManager = null;
 

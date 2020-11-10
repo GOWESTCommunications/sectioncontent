@@ -10,6 +10,7 @@
             <label index="ordering">Visibility options</label>
             <label index="enableFields">EnableFields</label>
             <label index="template">Template</label>
+            <label index="layout">Layout</label>
 
             <label index="default"></label>
             <label index="yes">Yes</label>

@@ -8,12 +8,26 @@
 				</TCEforms>
 				<type>array</type>
 				<el>
+                    <settings.layout>
+                        <TCEforms>
+                            <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:layout</label>
+                            <config>
+                                <type>select</type>
+                                <itemsProcFunc>GoWest\Sectioncontent\Backend\ItemsProcFunc->sectioncontentLayouts</itemsProcFunc>
+                                <renderType>selectSingle</renderType>
+                                <items>
+                                    <!-- empty by default -->
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </settings.layout>
 					<settings.source>
 						<TCEforms>
 							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:sourceLabel</label>
 							<onChange>reload</onChange>
 							<config>
 								<type>select</type>
+                                <renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
 										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:default</numIndex>
@@ -63,12 +77,7 @@
 					<settings.recursionDepthFrom>
 						<TCEforms>
 							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:recursionDepthFrom</label>
-							<displayCond>
-								<OR>
-									<numIndex index="0">FIELD:settings.source:IN:thisChildrenRecursively,customChildrenRecursively</numIndex>
-									<numIndex index="1">FIELD:settings.pageMode:!=:nested</numIndex>
-								</OR>
-							</displayCond>
+							<displayCond>FIELD:settings.source:IN:thisChildrenRecursively,customChildrenRecursively</displayCond>
 							<config>
 								<type>input</type>
 								<eval>int</eval>
@@ -95,6 +104,7 @@
 							<displayCond>FIELD:settings.source:IN:custom</displayCond>
 							<config>
 								<type>select</type>
+                                <renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
 										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:default</numIndex>
@@ -114,123 +124,9 @@
 							</config>
 						</TCEforms>
 					</settings.orderByPlugin>
-					<settings.loadContents>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:loadContents</label>
-							<config>
-								<type>select</type>
-								<items type="array">
-									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:default</numIndex>
-										<numIndex index="1"></numIndex>
-									</numIndex>
-									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:yes</numIndex>
-										<numIndex index="1">1</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:no</numIndex>
-										<numIndex index="1">0</numIndex>
-									</numIndex>
-								</items>
-								<maxitems>1</maxitems>
-								<size>1</size>
-							</config>
-						</TCEforms>
-					</settings.loadContents>
-					<settings.pageMode>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:pageMode</label>
-							<onChange>reload</onChange>
-							<displayCond>FIELD:settings.source:!IN:custom</displayCond>
-							<config>
-								<type>select</type>
-								<items type="array">
-									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:default</numIndex>
-										<numIndex index="1"></numIndex>
-									</numIndex>
-									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:pageMode.flat</numIndex>
-										<numIndex index="1">flat</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:pageMode.nested</numIndex>
-										<numIndex index="1">nested</numIndex>
-									</numIndex>
-								</items>
-								<maxitems>1</maxitems>
-								<size>1</size>
-							</config>
-						</TCEforms>
-					</settings.pageMode>
 				</el>
 			</ROOT>
 		</generalsheet>
-		<jsfiltersheet>
-			<ROOT>
-				<TCEforms>
-					<sheetTitle>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:jsFiltersheet</sheetTitle>
-				</TCEforms>
-				<type>array</type>
-				<el>
-					<settings.jsFiltertype>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:jsFiltertype</label>
-							<config>
-								<type>select</type>
-								<items>
-									<numIndex index="0">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:noJsFilter</numIndex>
-										<numIndex index="1">0</numIndex>
-									</numIndex>
-									<numIndex index="1">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:jsFilterSelected</numIndex>
-										<numIndex index="1">jsFilterSelected</numIndex>
-									</numIndex>
-									<numIndex index="2">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:jsFilterChildOfSelected</numIndex>
-										<numIndex index="1">jsFilterChildOfSelected</numIndex>
-									</numIndex>
-								</items>
-							</config>
-							<onChange>reload</onChange>
-						</TCEforms>
-					</settings.jsFiltertype>
-					<settings.resetJsFilter>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:resetJsFilter</label>
-							<displayCond>FIELD:settings.jsFiltertype:IN:jsFilterSelected,jsFilterChildOfSelected</displayCond>
-							<config>
-								<type>check</type>
-							</config>
-						</TCEforms>
-					</settings.resetJsFilter>
-					<settings.filterCategories>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:filterCategories</label>
-							<displayCond>FIELD:settings.jsFiltertype:IN:jsFilterSelected,jsFilterChildOfSelected</displayCond>
-							<config>
-								<type>select</type>
-								<autoSizeMax>50</autoSizeMax>
-								<foreign_table>sys_category</foreign_table>
-								<foreign_table_where> AND sys_category.sys_language_uid IN (-1, 0) ORDER BY sys_category.sorting ASC</foreign_table_where>
-								<maxitems>9999</maxitems>
-								<renderMode>tree</renderMode>
-								<size>10</size>
-								<treeConfig>
-									<appearance>
-										<expandAll>1</expandAll>
-										<showHeader>1</showHeader>
-									</appearance>
-									<parentField>parent</parentField>
-								</treeConfig>
-							</config>
-						</TCEforms>
-					</settings.filterCategories>
-				</el>
-			</ROOT>
-		</jsfiltersheet>
 		<orderingsheet>
 			<ROOT>
 				<TCEforms>
@@ -244,6 +140,7 @@
 							<onChange>reload</onChange>
 							<config>
 								<type>select</type>
+                                <renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
 										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:default</numIndex>
@@ -308,6 +205,7 @@
 							<displayCond>FIELD:settings.orderBy:IN:title,sorting,crdate,tstamp,starttime,endtime,customField</displayCond>
 							<config>
 								<type>select</type>
+                                <renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
 										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:default</numIndex>
@@ -354,6 +252,7 @@
 							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:showNavHiddenItems</label>
 							<config>
 								<type>select</type>
+                                <renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
 										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:default</numIndex>
@@ -378,6 +277,7 @@
 							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:hideCurrentPage</label>
 							<config>
 								<type>select</type>
+                                <renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
 										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:default</numIndex>
@@ -424,6 +324,7 @@
 							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:categoryMode</label>
 							<config>
 								<type>select</type>
+                                <renderType>selectSingle</renderType>
 								<onChange>reload</onChange>
 								<items type="array">
 									<numIndex index="0" type="array">
@@ -464,9 +365,10 @@
 					<settings.categoriesList>
 						<TCEforms>
 							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:categories</label>
-							<displayCond>FIELD:settings.categoryMode:IN:1,2,3,4,5,6</displayCond>
+							<displayCond>FIELD:settings.categoryMode:IN:1,2,3,4</displayCond>
 							<config>
 								<type>select</type>
+                                <renderType>selectTree</renderType>
 								<autoSizeMax>50</autoSizeMax>
 								<foreign_table>sys_category</foreign_table>
 								<foreign_table_where> AND sys_category.sys_language_uid IN (-1, 0) ORDER BY sys_category.sorting ASC</foreign_table_where>
@@ -493,69 +395,6 @@
 				</TCEforms>
 				<type>array</type>
 				<el>
-					<view.templateType>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:templateType</label>
-							<onChange>reload</onChange>
-							<config>
-								<type>select</type>
-								<items type="array">
-									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:templateType.file</numIndex>
-										<numIndex index="1">file</numIndex>
-									</numIndex>
-									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:templateType.directory</numIndex>
-										<numIndex index="1">directory</numIndex>
-									</numIndex>
-								</items>
-								<maxitems>1</maxitems>
-								<size>1</size>
-							</config>
-						</TCEforms>
-					</view.templateType>
-					<view.templateRootFile>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:templateRootFile</label>
-							<displayCond>FIELD:view.templateType:IN:file,</displayCond>
-							<config>
-								<type>input</type>
-								<eval>trim</eval>
-								<default></default>
-							</config>
-						</TCEforms>
-					</view.templateRootFile>
-					<view.templateRootPath.10>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:templateRootPath</label>
-							<displayCond>FIELD:view.templateType:IN:directory</displayCond>
-							<config>
-								<type>input</type>
-								<eval>trim</eval>
-								<default></default>
-							</config>
-						</TCEforms>
-					</view.templateRootPath.10>
-					<view.partialRootPath.300>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:partialRootPath</label>
-							<config>
-								<type>input</type>
-								<eval>trim</eval>
-								<default></default>
-							</config>
-						</TCEforms>
-					</view.partialRootPath.300>
-					<view.layoutRootPath.300>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:layoutRootPath</label>
-							<config>
-								<type>input</type>
-								<eval>trim</eval>
-								<default></default>
-							</config>
-						</TCEforms>
-					</view.layoutRootPath.300>
 				</el>
 			</ROOT>
 		</tempaltesheet>

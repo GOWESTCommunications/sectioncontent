@@ -33,8 +33,31 @@ lib.tx_sectioncontent {
     view =< plugin.tx_sectioncontent.view
 }
 
-page.includeCSS.sectioncontent = EXT:sectioncontent/Resources/Public/css/default.css
 
-[compatVersion == 9.5]
-page.includeCSS.sectioncontent = EXT:sectioncontent/Resources/Public/sass/sectioncontent.scss
-[END]
+tt_content.list =< lib.contentElementWithHeader
+tt_content.list {
+    fields {
+        content {
+            fields {
+                data = CASE
+                data {
+                    key.field = list_type
+
+                    sectioncontent_pi1 = USER
+                    sectioncontent_pi1 {
+                        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+                        vendorName = GoWest
+                        extensionName = Sectioncontent
+                        pluginName = Pi1
+                        controller = Teaser
+
+                        view < plugin.tx_sectioncontent.view
+                        persistence < plugin.tx_sectioncontent.persistence
+                        settings < plugin.tx_sectioncontent.settings
+                    }
+                }
+            }
+
+        }
+    }
+}

@@ -3,37 +3,25 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-$extConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);
+$extConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sectioncontent']);
 $actionNotToCache = '';
 if ($extConfiguration['ENABLECACHE'] == '0') {
     $actionNotToCache = 'index';
 }
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-    'GoWest.' . $_EXTKEY,
+    'GoWest.sectioncontent',
     'Pi1',
-    
-    array(
+    [
         'Teaser' => 'index',
-    ),
-    
-    array(
+    ],
+    [
         'Teaser' => $actionNotToCache,
-    )
+    ]
 );
-
-$rootLineFields = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(
-    ',',
-    $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'],
-    true
-);
-$rootLineFields[] = 'sorting';
-
-$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = implode(',', $rootLineFields);
-$GLOBALS['TYPO3_CONF_VARS']['FE']['pageOverlayFields'] .= ',tx_sectioncontent_abstract_title, tx_sectioncontent_abstract_subtitle, tx_sectioncontent_abstract_description, tx_sectioncontent_abstract_attr_1, tx_sectioncontent_abstract_attr_2, tx_sectioncontent_abstract_attr_3, tx_sectioncontent_abstract_attr_4, tx_sectioncontent_abstract_attr_5, tx_sectioncontent_abstract_attr_6, tx_sectioncontent_abstract_attr_7, tx_sectioncontent_abstract_attr_8, tx_sectioncontent_abstract_image, tx_sectioncontent_abstract_image_2, tx_sectioncontent_abstract_reference_url';
 
 // Constants
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript($_EXTKEY,'constants',' <INCLUDE_TYPOSCRIPT: source="FILE:EXT:'. $_EXTKEY .'/Configuration/TypoScript/constants.txt">');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript('sectioncontent', 'constants', ' <INCLUDE_TYPOSCRIPT: source="FILE:EXT:sectioncontent/Configuration/TypoScript/constants.typoscript">');
 
 // Setup     
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript($_EXTKEY,'setup',' <INCLUDE_TYPOSCRIPT: source="FILE:EXT:'. $_EXTKEY .'/Configuration/TypoScript/setup.txt">');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript('sectioncontent', 'setup', ' <INCLUDE_TYPOSCRIPT: source="FILE:EXT:sectioncontent/Configuration/TypoScript/setup.typoscript">');

@@ -1,21 +1,30 @@
 {
-	"name": "gowest/sectioncontent",
-	"type": "typo3-cms-extension",
-	"description": "Create page teasers with data from page properties and its content elements. Based on Extbase and Fluid Template Engine.",
-	"version": "5.1.4",
-	"homepage": "http://typo3.org",
-	"license": [
-		"GPL-2.0+"
-	],
-	"require": {
-		"typo3/cms-core": ">=6.2.0,<8.0"
-	},
-	"autoload": {
-		"psr-4": {
-			"GoWest\\Sectioncontent\\": "Classes"
-		}
-	},
-	"replace": {
-		"sectioncontent": "*"
-	}
+    "name": "gowest/sectioncontent",
+    "type": "typo3-cms-extension",
+    "description": "Create page teaser JSON for use as Headless",
+    "version": "10.0.0",
+    "homepage": "http://go-west.at",
+    "license": [
+        "GPL-2.0+"
+    ],
+    "require": {
+        "typo3/cms-core": ">=10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "GoWest\\Sectioncontent\\": "Classes"
+        }
+    },
+    "replace": {
+        "sectioncontent": "*"
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "sectioncontent"
+        }
+    },
+    "replace": {
+        "sectioncontent": "self.version",
+        "typo3-ter/sectioncontent": "self.version"
+    }
 }

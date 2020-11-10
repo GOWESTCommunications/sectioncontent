@@ -14,7 +14,7 @@ $EM_CONF[$_EXTKEY] = array(
         'Based on Extbase and Fluid Template Engine.',
     'category' => 'plugin',
     'shy' => 0,
-    'version' => '6.1.5',
+    'version' => '10.0.0',
     'dependencies' => '',
     'conflicts' => '',
     'priority' => '',
@@ -33,7 +33,7 @@ $EM_CONF[$_EXTKEY] = array(
     'CGLcompliance_note' => '',
     'constraints' => array(
         'depends' => array(
-            'typo3' => '9.5.0-9.5.99',
+            'typo3' => '10.0.0-10.4.99',
         ),
         'conflicts' => array(),
         'suggests' => array(),
