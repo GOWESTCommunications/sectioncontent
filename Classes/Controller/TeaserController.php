@@ -34,9 +34,9 @@ use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ImageService;
-use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Core\Site\SiteFinder;
+use FriendsOfTYPO3\Headless\Utility\FileUtility;
 
 /**
  * Controller for the Teaser object
@@ -111,36 +111,36 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->pages = [];
         $this->onlyIncluded = false;
         $this->selectFields = [
-            'uid',
-            'pid',
-            'IF(starttime = 0, crdate, starttime) as publish_date',
-            'IF(tx_sectioncontent_abstract_title != "", tx_sectioncontent_abstract_title, title) as teaser_title',
-            'IF(tx_sectioncontent_abstract_subtitle != "", tx_sectioncontent_abstract_subtitle, subtitle) as teaser_subtitle',
-            'IF(tx_sectioncontent_abstract_description != "", tx_sectioncontent_abstract_description, abstract) as teaser_description',
-            'sys_language_uid',
-            'author',
-            'author_email',
-            'tx_sectioncontent_abstract_attr_1',
-            'tx_sectioncontent_abstract_attr_2',
-            'tx_sectioncontent_abstract_attr_3',
-            'tx_sectioncontent_abstract_attr_4',
-            'tx_sectioncontent_abstract_attr_5',
-            'tx_sectioncontent_abstract_attr_6',
-            'tx_sectioncontent_abstract_attr_7',
-            'tx_sectioncontent_abstract_attr_8',
-            'media',
-            'tx_sectioncontent_abstract_image',
-            'tx_sectioncontent_abstract_image_2',
-            'tx_sectioncontent_abstract_image_3',
-            'tx_sectioncontent_abstract_image_4',
-            'tx_sectioncontent_abstract_reference_url',
+            'p.uid',
+            'p.pid',
+            'IF(p.starttime = 0, p.crdate, p.starttime) as publish_date',
+            'IF(p.tx_sectioncontent_abstract_title != "", p.tx_sectioncontent_abstract_title, p.title) as teaser_title',
+            'IF(p.tx_sectioncontent_abstract_subtitle != "", p.tx_sectioncontent_abstract_subtitle, p.subtitle) as teaser_subtitle',
+            'IF(p.tx_sectioncontent_abstract_description != "", p.tx_sectioncontent_abstract_description, p.abstract) as teaser_description',
+            'p.sys_language_uid',
+            'p.author',
+            'p.author_email',
+            'p.tx_sectioncontent_abstract_attr_1',
+            'p.tx_sectioncontent_abstract_attr_2',
+            'p.tx_sectioncontent_abstract_attr_3',
+            'p.tx_sectioncontent_abstract_attr_4',
+            'p.tx_sectioncontent_abstract_attr_5',
+            'p.tx_sectioncontent_abstract_attr_6',
+            'p.tx_sectioncontent_abstract_attr_7',
+            'p.tx_sectioncontent_abstract_attr_8',
+            'p.media',
+            'p.tx_sectioncontent_abstract_image',
+            'p.tx_sectioncontent_abstract_image_2',
+            'p.tx_sectioncontent_abstract_image_3',
+            'p.tx_sectioncontent_abstract_image_4',
+            'p.tx_sectioncontent_abstract_reference_url',
         ];
 
         $this->baseQuery = "
             SELECT 
                 ###SELECT_FIELDS###
             FROM
-                pages
+                pages p 
             WHERE
                 (
                     (
@@ -149,6 +149,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                     AND sys_language_uid = ###SYS_LANGUAGE_UID###
                 )
                 AND ###ADD_WHERE###
+                AND ###SPECIAL_ADD_WHERE###
             
             ORDER BY ###ORDER_BY###
             LIMIT ###LIMIT###
@@ -158,7 +159,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             SELECT 
                 ###SELECT_FIELDS###
             FROM
-                pages
+                pages p
             WHERE
                 (
                     (
@@ -168,35 +169,46 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                     AND sys_language_uid = ###SYS_LANGUAGE_UID###
                 )
                 AND ###ADD_WHERE###
+                AND ###SPECIAL_ADD_WHERE###
                     
             ORDER BY ###ORDER_BY###
             LIMIT ###LIMIT###
         ";
 
         $this->baseQueryRecursive = "
-            SELECT 
-                ###SELECT_FIELDS###
-            FROM
-                (
-                    SELECT 
-                        *
-                    FROM
-                        pages
-                    ORDER BY pid , uid
-                    ) pages_sorted,
-                (SELECT @pid:='###SELECTED_UIDS###') parent_pages
-            WHERE
+            WITH RECURSIVE collected_pages as (
+                SELECT
+                    p.*,
+                    0 as level
+                FROM
+                    pages p
+                WHERE
                 (
                     (
-                        FIND_IN_SET(pid, @pid)
+                        FIND_IN_SET(p.uid, '###SELECTED_UIDS###')
+                        OR FIND_IN_SET(p.l10n_parent, '###SELECTED_UIDS###')
                     )
-                    AND sys_language_uid = ###SYS_LANGUAGE_UID###
-                    AND LENGTH(@pid:=CONCAT(@pid, ',', uid))
+                    AND p.sys_language_uid = ###SYS_LANGUAGE_UID###
                 )
                 AND ###ADD_WHERE###
-                    
+                UNION ALL
+                SELECT
+                    p.*,
+                    cp.level+1 as level
+                FROM
+                    pages p
+                INNER JOIN 
+                    collected_pages cp on p.pid = cp.uid
+                WHERE p.sys_language_uid = ###SYS_LANGUAGE_UID###
+                AND ###ADD_WHERE###
+            )
+            SELECT 
+                ###SELECT_FIELDS###,
+                level
+            FROM collected_pages p
+            WHERE ###SPECIAL_ADD_WHERE###
             ORDER BY ###ORDER_BY###
-            LIMIT ###LIMIT###
+            LIMIT ###LIMIT###;
         ";
 
         switch ($this->settings['source']) {
@@ -240,6 +252,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 '###SELECTED_UIDS###',
                 '###SYS_LANGUAGE_UID###',
                 '###ADD_WHERE###',
+                '###SPECIAL_ADD_WHERE###',
                 '###ORDER_BY###',
                 '###LIMIT###',
             ],
@@ -248,6 +261,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 $this->rootPageUids,
                 $this->sys_language_uid,
                 $this->addWhere,
+                $this->specialAddWhere,
                 $this->orderBy,
                 $this->limit,
             ],
@@ -267,11 +281,13 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $statement = $this->dbConnections['pages']->prepare($this->baseQuery);
         $statement->execute();
         while ($row = $statement->fetch()) {
+            $row['categories'] = [];
             $this->allPages['uids'][$row['uid']] = $row['uid'];
             $this->allPages['pageInfo'][$row['uid']] = $row;
         }
 
         $this->handleCategories();
+        $this->addPageCategories();
 
         if ($this->onlyIncluded == true) {
             foreach ($this->includePages as $pageUid) {
@@ -295,7 +311,6 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         $this->pages['layout'] = $this->settings['layout'];
         $this->pages['pageInfo'] = $this->performSpecialOrderings($this->pages['pageInfo']);
-
         return json_encode($this->pages);
     }
 
@@ -316,31 +331,9 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
                 foreach ($this->fileReferences[$newPageInfo['uid']][$mediaField] as $fileReference) {
                     $image = $this->imageService->getImage($fileReference['uid'], null, true);
-
-                    if ($cropString === null && $image->hasProperty('crop') && $image->getProperty('crop')) {
-                        $cropString = $image->getProperty('crop');
-                    }
-
-
-                    $cropVariantCollection = CropVariantCollection::create((string)$cropString);
-                    $cropVariant = $arguments['cropVariant'] ?: 'default';
-                    $cropArea = $cropVariantCollection->getCropArea($cropVariant);
-                    $processingInstructions = [
-                        'width' => $arguments['width'],
-                        'height' => $arguments['height'],
-                        'minWidth' => $arguments['minWidth'],
-                        'minHeight' => $arguments['minHeight'],
-                        'maxWidth' => $arguments['maxWidth'],
-                        'maxHeight' => $arguments['maxHeight'],
-                        'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($image),
-                    ];
-                    if (!empty($arguments['fileExtension'])) {
-                        $processingInstructions['fileExtension'] = $arguments['fileExtension'];
-                    }
-
-                    $processedImage = $this->imageService->applyProcessingInstructions($image, $processingInstructions);
-                    $imageUri = $this->imageService->getImageUri($processedImage, true);
-                    $newPageInfo[$mediaField][] = $imageUri;
+                    $image = $this->getFileUtility()->processFile($image);
+                    $image['properties']['crop'] = json_decode($image['properties']['crop'], 1);
+                    $newPageInfo[$mediaField][] = $image;
                 }
             }
         }
@@ -348,9 +341,32 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $site = $this->siteFinder->getSiteByPageId($newPageInfo['uid']);
         $newPageInfo['link'] = $site->getRouter()->generateUri($newPageInfo['uid'])->getPath();
 
+
         return $newPageInfo;
     }
 
+    protected function addPageCategories() {
+
+        $categoryQuery = "
+            SELECT
+                uid_local as category_uid,
+                uid_foreign as page_uid 
+            FROM 
+                sys_category_record_mm
+            WHERE
+                tablenames = 'pages' 
+                AND fieldname = 'categories'
+                AND FIND_IN_SET(uid_foreign, " . $this->currentPageUid . ")
+        ";
+
+        $statement = $this->dbConnections['sys_category_record_mm']->prepare($categoryQuery);
+        $statement->execute();
+        while ($row = $statement->fetch()) {
+            if(isset($this->allPages['pageInfo'][$row['page_uid']])) {
+                $this->allPages['pageInfo'][$row['page_uid']]['categories'][] = $row['category_uid'];
+            }
+        }
+    }
 
     protected function getAllFilterCategories($mode = 'selected')
     {
@@ -380,7 +396,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 }
             }
         }
-
+        
         return $return;
     }
 
@@ -442,32 +458,52 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     protected function performPluginConfigurations()
     {
         $this->addWhere = '';
+        $this->specialAddWhere = '';
         $addWhereArr = [];
+        $specialAddWhereArr = [];
 
         # Base visible states
-        $addWhereArr[] = 'hidden = 0';
-        $addWhereArr[] = 'deleted = 0';
-        $addWhereArr[] = 'starttime <= UNIX_TIMESTAMP()';
-        $addWhereArr[] = 'IF(endtime = 0, true, (endtime >= UNIX_TIMESTAMP()))';
+        $addWhereArr[] = 'p.hidden = 0';
+        $addWhereArr[] = 'p.deleted = 0';
+        $addWhereArr[] = 'p.starttime <= UNIX_TIMESTAMP()';
+        $addWhereArr[] = 'IF(p.endtime = 0, true, (p.endtime >= UNIX_TIMESTAMP()))';
 
         if ($this->settings['showNavHiddenItems'] != '1') {
-            $addWhereArr[] = 'nav_hide = 0';
+            $addWhereArr[] = 'p.nav_hide = 0';
         }
 
         if (!empty($this->settings['showDoktypes'])) {
-            $addWhereArr[] = "FIND_IN_SET(doktype, '" . $this->settings['showDoktypes'] . "')";
+            $addWhereArr[] = "FIND_IN_SET(p.doktype, '" . $this->settings['showDoktypes'] . "')";
         }
-
 
         if ($this->settings['hideCurrentPage'] == '1') {
-            $addWhereArr[] = " NOT FIND_IN_SET(uid, '" . $this->currentPageUid . "')";
+            $specialAddWhereArr[] = " NOT FIND_IN_SET(p.uid, '" . $this->currentPageUid . "')";
+        }
+        
+        if ($this->settings['ignoreUids']) {
+            $specialAddWhereArr[] = " NOT FIND_IN_SET(p.uid, '" . $this->settings['ignoreUids'] . "')";
         }
 
-        if ($this->settings['ignoreUids']) {
-            $addWhereArr[] = " NOT FIND_IN_SET(uid, '" . $this->settings['ignoreUids'] . "')";
+
+        if($this->settings['source'] == 'thisChildrenRecursively' || $this->settings['source'] == 'customChildrenRecursively') {
+            $specialAddWhereArr[] = " NOT FIND_IN_SET(p.uid, '" . $this->rootPageUids . "')";
+
+            if($this->settings['recursionDepthFrom'] > 0) {
+                $specialAddWhereArr[] = " level >= " . (int)$this->settings['recursionDepthFrom'] . " ";
+            }
+            if($this->settings['recursionDepth'] < 255) {
+                $specialAddWhereArr[] = " level <= " . (int)$this->settings['recursionDepth'] . " ";
+            }
         }
+
 
         $this->addWhere = '(' . implode(' AND ', $addWhereArr) . ')';
+
+        if(count($specialAddWhereArr) > 0) {
+            $this->specialAddWhere = '(' . implode(' AND ', $specialAddWhereArr) . ')';
+        } else {
+            $this->specialAddWhere = '1';
+        }
     }
 
     protected function getFileReferences()
@@ -648,5 +684,13 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         #    return $pages;
         #}
         return $pages;
+    }
+
+    /**
+     * @return FileUtility
+     */
+    protected function getFileUtility(): FileUtility
+    {
+        return GeneralUtility::makeInstance(FileUtility::class);
     }
 }
