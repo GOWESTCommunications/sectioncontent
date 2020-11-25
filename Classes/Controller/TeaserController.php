@@ -356,12 +356,13 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             WHERE
                 tablenames = 'pages' 
                 AND fieldname = 'categories'
-                AND FIND_IN_SET(uid_foreign, " . $this->currentPageUid . ")
+                AND FIND_IN_SET(uid_foreign, '" . implode(',', $this->allPages['uids']) . "')
         ";
 
         $statement = $this->dbConnections['sys_category_record_mm']->prepare($categoryQuery);
         $statement->execute();
         while ($row = $statement->fetch()) {
+            
             if(isset($this->allPages['pageInfo'][$row['page_uid']])) {
                 $this->allPages['pageInfo'][$row['page_uid']]['categories'][] = $row['category_uid'];
             }
