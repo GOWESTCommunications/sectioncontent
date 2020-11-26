@@ -347,24 +347,34 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
     protected function addPageCategories() {
 
+        $catJoinCol = ($this->sys_language_uid > 0) ? 'l10n_parent' : 'uid';
+
         $categoryQuery = "
             SELECT
-                uid_local as category_uid,
-                uid_foreign as page_uid 
-            FROM 
-                sys_category_record_mm
+                cmm.uid_local AS category_uid, 
+                cmm.uid_foreign AS page_uid,
+                c.title,
+                c.sys_language_uid
+            FROM
+                sys_category_record_mm cmm JOIN sys_category c ON c." . $catJoinCol . " = cmm.uid_local
             WHERE
-                tablenames = 'pages' 
-                AND fieldname = 'categories'
-                AND FIND_IN_SET(uid_foreign, '" . implode(',', $this->allPages['uids']) . "')
+                cmm.tablenames = 'pages' 
+                AND cmm.fieldname = 'categories'
+                AND FIND_IN_SET(cmm.uid_foreign, '" . implode(',', $this->allPages['uids']) . "')
+                AND c.hidden = 0
+                AND c.deleted = 0
+                AND c.starttime <= UNIX_TIMESTAMP()
+                AND IF(c.endtime = 0, true, (c.endtime >= UNIX_TIMESTAMP()))
         ";
 
         $statement = $this->dbConnections['sys_category_record_mm']->prepare($categoryQuery);
         $statement->execute();
         while ($row = $statement->fetch()) {
-            
             if(isset($this->allPages['pageInfo'][$row['page_uid']])) {
-                $this->allPages['pageInfo'][$row['page_uid']]['categories'][] = $row['category_uid'];
+                $this->allPages['pageInfo'][$row['page_uid']]['categories'][] = [
+                    'cat_id' => $row['category_uid'],
+                    'title' => $row['title'],
+                ];
             }
         }
     }
