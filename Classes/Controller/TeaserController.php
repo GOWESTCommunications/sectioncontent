@@ -37,6 +37,7 @@ use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use FriendsOfTYPO3\Headless\Utility\FileUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * Controller for the Teaser object
@@ -282,6 +283,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $statement->execute();
         while ($row = $statement->fetch()) {
             $row['categories'] = [];
+            $row = $this->processSpecialFields($row);
             $this->allPages['uids'][$row['uid']] = $row['uid'];
             $this->allPages['pageInfo'][$row['uid']] = $row;
         }
@@ -682,19 +684,19 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 $pages = array_slice($pages, 0, $this->settings['limit']);
             }
         }
-
-        #if ($this->settings['orderBy'] === 'sorting' && strpos($this->settings['source'], 'Recursively') !== false) {
-        #    usort($pages, array($this, 'sortByRecursivelySorting'));
-        #    if (strtolower($this->settings['orderDirection']) === strtolower(QueryInterface::ORDER_DESCENDING)) {
-        #        $pages = array_reverse($pages);
-        #    }
-        #    if (!empty($this->settings['limit'])) {
-        #        $pages = array_slice($pages, 0, $this->settings['limit']);
-        #        return $pages;
-        #    }
-        #    return $pages;
-        #}
+        
         return $pages;
+    }
+
+    protected function processSpecialFields($page) {
+        if($page['tx_sectioncontent_abstract_reference_url'] != '') {
+            $instructions = [
+                'parameter' => $page['tx_sectioncontent_abstract_reference_url'],
+            ];
+            $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+            $page['tx_sectioncontent_abstract_reference_url'] = $contentObject->typoLink_URL($instructions);
+        }
+        return $page;
     }
 
     /**

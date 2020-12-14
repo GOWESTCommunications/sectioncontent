@@ -14,7 +14,7 @@ $EM_CONF[$_EXTKEY] = array(
         'Based on Extbase and Fluid Template Engine.',
     'category' => 'plugin',
     'shy' => 0,
-    'version' => '10.0.3',
+    'version' => '10.0.4',
     'dependencies' => '',
     'conflicts' => '',
     'priority' => '',
