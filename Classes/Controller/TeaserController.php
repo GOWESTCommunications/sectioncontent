@@ -684,8 +684,12 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 $pages = array_slice($pages, 0, $this->settings['limit']);
             }
         }
+        $sorted = [];
+        foreach($pages as $page) {
+            $sorted[] = $page;
+        }
         
-        return $pages;
+        return $sorted;
     }
 
     protected function processSpecialFields($page) {
