@@ -37,7 +37,6 @@ use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use FriendsOfTYPO3\Headless\Utility\FileUtility;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * Controller for the Teaser object
@@ -283,7 +282,6 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $statement->execute();
         while ($row = $statement->fetch()) {
             $row['categories'] = [];
-            $row = $this->processSpecialFields($row);
             $this->allPages['uids'][$row['uid']] = $row['uid'];
             $this->allPages['pageInfo'][$row['uid']] = $row;
         }
@@ -449,16 +447,18 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         if (!empty($this->settings['orderBy'])) {
             if ($this->settings['orderBy'] === 'customField') {
                 $this->orderBy = $this->settings['orderByCustomField'] . ' ' . $this->orderDirection;
+            } else if($this->settings['orderBy'] === 'random') {
+                $this->orderBy = 'RAND()';
             } else {
                 $this->orderBy = $this->settings['orderBy'] . ' ' . $this->orderDirection;
             }
         }
 
-        if (!empty($this->settings['limit']) && $this->settings['orderBy'] !== 'random') {
+        if (!empty($this->settings['limit'])) {
             $this->limit = $this->settings['limit'];
         }
 
-        if (!empty($this->settings['offset']) && $this->settings['orderBy'] !== 'random') {
+        if (!empty($this->settings['offset'])) {
             $this->limit = $this->settings['offset'] . ',' . $this->settings['limit'];
         }
     }
@@ -678,29 +678,25 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     protected function performSpecialOrderings(array $pages)
     {
         // Make random if selected on queryResult, cause Extbase doesn't support it
-        if ($this->settings['orderBy'] === 'random') {
-            shuffle($pages);
-            if (!empty($this->settings['limit'])) {
-                $pages = array_slice($pages, 0, $this->settings['limit']);
-            }
-        }
-        $sorted = [];
-        foreach($pages as $page) {
-            $sorted[] = $page;
-        }
-        
-        return $sorted;
-    }
+        #if ($this->settings['orderBy'] === 'random') {
+        #    shuffle($pages);
+        #    if (!empty($this->settings['limit'])) {
+        #        $pages = array_slice($pages, 0, $this->settings['limit']);
+        #    }
+        #}
 
-    protected function processSpecialFields($page) {
-        if($page['tx_sectioncontent_abstract_reference_url'] != '') {
-            $instructions = [
-                'parameter' => $page['tx_sectioncontent_abstract_reference_url'],
-            ];
-            $contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
-            $page['tx_sectioncontent_abstract_reference_url'] = $contentObject->typoLink_URL($instructions);
-        }
-        return $page;
+        #if ($this->settings['orderBy'] === 'sorting' && strpos($this->settings['source'], 'Recursively') !== false) {
+        #    usort($pages, array($this, 'sortByRecursivelySorting'));
+        #    if (strtolower($this->settings['orderDirection']) === strtolower(QueryInterface::ORDER_DESCENDING)) {
+        #        $pages = array_reverse($pages);
+        #    }
+        #    if (!empty($this->settings['limit'])) {
+        #        $pages = array_slice($pages, 0, $this->settings['limit']);
+        #        return $pages;
+        #    }
+        #    return $pages;
+        #}
+        return $pages;
     }
 
     /**
