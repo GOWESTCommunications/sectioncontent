@@ -677,26 +677,12 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      */
     protected function performSpecialOrderings(array $pages)
     {
-        // Make random if selected on queryResult, cause Extbase doesn't support it
-        #if ($this->settings['orderBy'] === 'random') {
-        #    shuffle($pages);
-        #    if (!empty($this->settings['limit'])) {
-        #        $pages = array_slice($pages, 0, $this->settings['limit']);
-        #    }
-        #}
+        $sorted = [];
+        foreach($pages as $page) {
+            $sorted[] = $page;
+        }
 
-        #if ($this->settings['orderBy'] === 'sorting' && strpos($this->settings['source'], 'Recursively') !== false) {
-        #    usort($pages, array($this, 'sortByRecursivelySorting'));
-        #    if (strtolower($this->settings['orderDirection']) === strtolower(QueryInterface::ORDER_DESCENDING)) {
-        #        $pages = array_reverse($pages);
-        #    }
-        #    if (!empty($this->settings['limit'])) {
-        #        $pages = array_slice($pages, 0, $this->settings['limit']);
-        #        return $pages;
-        #    }
-        #    return $pages;
-        #}
-        return $pages;
+        return $sorted;
     }
 
     /**
