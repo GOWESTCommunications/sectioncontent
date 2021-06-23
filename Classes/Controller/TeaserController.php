@@ -444,7 +444,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         }
 
 
-        if (!empty($this->settings['orderBy'])) {
+        if (!empty($this->settings['orderBy']) && $this->settings['orderBy'] !== 'random') {
             if ($this->settings['orderBy'] === 'customField') {
                 $this->orderBy = $this->settings['orderByCustomField'] . ' ' . $this->orderDirection;
             } else if($this->settings['orderBy'] === 'random') {
