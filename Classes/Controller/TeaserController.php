@@ -309,8 +309,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             $pageInfo = $this->getPageData($pageInfo);
         }
 
+        $this->pages = $this->performSpecialOrderings($this->pages);
         $this->pages['layout'] = $this->settings['layout'];
-        $this->pages['pageInfo'] = $this->performSpecialOrderings($this->pages['pageInfo']);
         return json_encode($this->pages);
     }
 
@@ -443,8 +443,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             $this->orderDirection = $this->settings['orderDirection'];
         }
 
-
-        if (!empty($this->settings['orderBy']) && $this->settings['orderBy'] !== 'random') {
+        if (!empty($this->settings['orderBy'])) {
             if ($this->settings['orderBy'] === 'customField') {
                 $this->orderBy = $this->settings['orderByCustomField'] . ' ' . $this->orderDirection;
             } else if($this->settings['orderBy'] === 'random') {
@@ -453,13 +452,14 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 $this->orderBy = $this->settings['orderBy'] . ' ' . $this->orderDirection;
             }
         }
+        if($this->settings['orderBy'] !== 'random') {
+            if (!empty($this->settings['limit'])) {
+                $this->limit = $this->settings['limit'];
+            }
 
-        if (!empty($this->settings['limit'])) {
-            $this->limit = $this->settings['limit'];
-        }
-
-        if (!empty($this->settings['offset'])) {
-            $this->limit = $this->settings['offset'] . ',' . $this->settings['limit'];
+            if (!empty($this->settings['offset'])) {
+                $this->limit = $this->settings['offset'] . ',' . $this->settings['limit'];
+            }
         }
     }
 
@@ -677,12 +677,24 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      */
     protected function performSpecialOrderings(array $pages)
     {
+        $newUids = [];
         $sorted = [];
-        foreach($pages as $page) {
+        foreach($pages['pageInfo'] as $page) {
             $sorted[] = $page;
         }
 
-        return $sorted;
+        // add the limit for random sorting later
+        if($this->settings['orderBy'] === 'random' && !empty($this->settings['limit'])) {
+            $sorted = array_slice($sorted, 0, $this->settings['limit']);
+            foreach($sorted as $page) {
+                $newUids[$page['uid']] = $page['uid'];
+            }
+        }
+
+        return [
+            'uids' => $newUids,
+            'pageInfo' => $sorted,
+        ];
     }
 
     /**
