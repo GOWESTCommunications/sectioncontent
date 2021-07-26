@@ -36,6 +36,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use FriendsOfTYPO3\Headless\Utility\FileUtility;
 
 /**
@@ -85,6 +86,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     public function initializeAction()
     {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
         $this->siteFinder = $this->objectManager->get(SiteFinder::class);
         $this->imageService = $this->objectManager->get(ImageService::class);
         $this->settings = $this->settingsUtility->renderConfigurationArray($this->settings);
@@ -311,6 +313,15 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         $this->pages = $this->performSpecialOrderings($this->pages);
         $this->pages['layout'] = $this->settings['layout'];
+        
+        // overview link
+        $instructions = [
+            'parameter' => $this->settings['link'],
+        ];
+        $link = $this->contentObject->typoLink_URL($instructions);
+
+        $this->pages['link'] = $link;
+        $this->pages['linktext'] = $this->settings['linktext'];
         return json_encode($this->pages);
     }
 
