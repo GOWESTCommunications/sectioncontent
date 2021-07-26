@@ -21,6 +21,28 @@
                             </config>
                         </TCEforms>
                     </settings.layout>
+					<settings.link>
+                        <TCEforms>
+                            <label>Buttonlink</label>
+                            <config>
+								<type>input</type>
+								<renderType>inputLink</renderType>
+								<size>30</size>
+								<eval>trim</eval>
+								<softref>typolink,typolink_tag,images,url</softref>
+							</config>
+                        </TCEforms>
+                    </settings.link>
+					<settings.linktext>
+                        <TCEforms>
+                            <label>Buttontext</label>
+                            <config>
+								<type>input</type>
+								<size>30</size>
+								<eval>trim</eval>
+							</config>
+                        </TCEforms>
+                    </settings.linktext>
 					<settings.source>
 						<TCEforms>
 							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_flexform.xml:sourceLabel</label>
