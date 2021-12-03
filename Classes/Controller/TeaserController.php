@@ -350,8 +350,11 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         }
 
         $site = $this->siteFinder->getSiteByPageId($newPageInfo['uid']);
-        $newPageInfo['link'] = $site->getRouter()->generateUri($newPageInfo['uid'])->getPath();
-
+        $newPageInfo['link'] = $site->getRouter()->generateUri($newPageInfo['uid'], ['L' => 1])->getPath();
+        $instructions = [
+            'parameter' =>  't3://page?uid='.$newPageInfo['uid'],
+        ];
+        $newPageInfo['link'] = $this->contentObject->typoLink_URL($instructions);
 
         return $newPageInfo;
     }
