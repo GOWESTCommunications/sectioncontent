@@ -463,7 +463,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             } else if($this->settings['orderBy'] === 'random') {
                 $this->orderBy = 'RAND()';
             } else {
-                $this->orderBy = $this->settings['orderBy'] . ' ' . $this->orderDirection;
+                $this->orderBy = str_replace("title", "teaser_title", $this->settings['orderBy']) . ' ' . $this->orderDirection;
             }
         }
         if($this->settings['orderBy'] !== 'random') {
