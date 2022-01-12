@@ -455,6 +455,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->orderBy = 'uid ASC';
         $this->orderDirection = 'ASC';
         $this->limit = 99999999;
+        $this->offset = 0;
         if (!empty($this->settings['orderDirection'])) {
             $this->orderDirection = $this->settings['orderDirection'];
         }
@@ -468,13 +469,16 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 $this->orderBy = str_replace("title", "teaser_title", $this->settings['orderBy']) . ' ' . $this->orderDirection;
             }
         }
+        if (!empty($this->settings['offset'])) {
+            $this->offset = $this->settings['offset'];
+        }
         // if($this->settings['orderBy'] !== 'random') {
         //     if (!empty($this->settings['limit'])) {
         //         $this->limit = $this->settings['limit'];
         //     }
 
         //     if (!empty($this->settings['offset'])) {
-        //         $this->limit = $this->settings['offset'] . ',' . $this->settings['limit'];
+        //         $this->limit = $this->settings[offset''] . ',' . $this->settings['limit'];
         //     }
         // }
         if(!empty($this->settings['orderByPlugin'])) {
@@ -638,6 +642,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
             $statement = $this->dbConnections['sys_category_record_mm']->prepare($this->categoryQuery);
             $statement->execute();
+
             // add empty category in case no page match that only included are used
             $this->categories[0][0] = 0;
             while ($row = $statement->fetch()) {
@@ -703,9 +708,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         foreach($pages['pageInfo'] as $page) {
             $sorted[] = $page;
         }
-
-        // add the limit for random sorting later
-        $sorted = array_slice($sorted, 0, $this->settings['limit']);
+        $limit = !empty($this->settings['limit']) ? $this->settings['limit'] : count($sorted);
+        $sorted = array_slice($sorted, $this->offset, $limit);
         foreach($sorted as $page) {
             $newUids[$page['uid']] = $page['uid'];
         }
