@@ -322,6 +322,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         $this->pages['link'] = $link;
         $this->pages['linktext'] = $this->settings['linktext'];
+
+        
         return json_encode($this->pages);
     }
 
@@ -466,15 +468,15 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 $this->orderBy = str_replace("title", "teaser_title", $this->settings['orderBy']) . ' ' . $this->orderDirection;
             }
         }
-        if($this->settings['orderBy'] !== 'random') {
-            if (!empty($this->settings['limit'])) {
-                $this->limit = $this->settings['limit'];
-            }
+        // if($this->settings['orderBy'] !== 'random') {
+        //     if (!empty($this->settings['limit'])) {
+        //         $this->limit = $this->settings['limit'];
+        //     }
 
-            if (!empty($this->settings['offset'])) {
-                $this->limit = $this->settings['offset'] . ',' . $this->settings['limit'];
-            }
-        }
+        //     if (!empty($this->settings['offset'])) {
+        //         $this->limit = $this->settings['offset'] . ',' . $this->settings['limit'];
+        //     }
+        // }
         if(!empty($this->settings['orderByPlugin'])) {
             $this->orderBy = "FIELD(uid, ".$this->settings['customPages'].") ASC";
         }
@@ -576,7 +578,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->categories = [];
         if (!empty($this->settings['categoriesList']) && !empty($this->settings['categoryMode'])) {
             $filterCategories = GeneralUtility::trimExplode(',', $this->settings['categoriesList'], true);
-
+            
             if (
 
                 (int)$this->settings['categoryMode'] == $this::CATEGORY_MODE_CURRENT_AND
@@ -594,6 +596,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                         AND fieldname = 'categories'
                         AND FIND_IN_SET(uid_foreign, " . $this->currentPageUid . ")
                 ";
+
+
 
                 $statement = $this->dbConnections['sys_category_record_mm']->prepare($this->categoryQuery);
                 $statement->execute();
@@ -632,15 +636,15 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 $this->categoryQuery
             );
 
-
-
             $statement = $this->dbConnections['sys_category_record_mm']->prepare($this->categoryQuery);
             $statement->execute();
+            // add empty category in case no page match that only included are used
+            $this->categories[0][0] = 0;
             while ($row = $statement->fetch()) {
                 // Do something with that single row
                 $this->categories[$row['uid_foreign']][$row['uid_local']] = $row['uid_local'];
             }
-
+            
             foreach ($this->categories as $page_id => $catInfo) {
                 switch ((int)$this->settings['categoryMode']) {
                     case $this::CATEGORY_MODE_OR:
@@ -701,11 +705,9 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         }
 
         // add the limit for random sorting later
-        if($this->settings['orderBy'] === 'random' && !empty($this->settings['limit'])) {
-            $sorted = array_slice($sorted, 0, $this->settings['limit']);
-            foreach($sorted as $page) {
-                $newUids[$page['uid']] = $page['uid'];
-            }
+        $sorted = array_slice($sorted, 0, $this->settings['limit']);
+        foreach($sorted as $page) {
+            $newUids[$page['uid']] = $page['uid'];
         }
 
         return [
