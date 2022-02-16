@@ -150,6 +150,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                     )
                     AND sys_language_uid = ###SYS_LANGUAGE_UID###
                 )
+                AND ((p.sys_language_uid = 0 AND p.l18n_cfg IN (0,2)) OR p.sys_language_uid > 0)
                 AND ###ADD_WHERE###
                 AND ###SPECIAL_ADD_WHERE###
             
@@ -170,6 +171,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                     )
                     AND sys_language_uid = ###SYS_LANGUAGE_UID###
                 )
+                AND ((p.sys_language_uid = 0 AND p.l18n_cfg IN (0,2)) OR p.sys_language_uid > 0)
                 AND ###ADD_WHERE###
                 AND ###SPECIAL_ADD_WHERE###
                     
@@ -202,6 +204,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 INNER JOIN 
                     collected_pages cp on p.pid = cp.uid
                 WHERE p.sys_language_uid = ###SYS_LANGUAGE_UID###
+                AND ((p.sys_language_uid = 0 AND p.l18n_cfg IN (0,2)) OR p.sys_language_uid > 0)
                 AND ###ADD_WHERE###
             )
             SELECT 
