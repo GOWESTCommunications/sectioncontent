@@ -484,7 +484,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         //         $this->limit = $this->settings[offset''] . ',' . $this->settings['limit'];
         //     }
         // }
-        if(!empty($this->settings['orderByPlugin'])) {
+        if(!empty($this->settings['orderByPlugin']) && $this->settings['source'] == 'custom' && $this->settings['customPages']) {
             $this->orderBy = "FIELD(uid, ".$this->settings['customPages'].") ASC";
         }
     }
