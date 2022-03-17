@@ -404,14 +404,51 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         $statement = $this->dbConnections['sys_category_record_mm']->prepare($categoryQuery);
         $statement->execute();
+        $categories = [];
         while ($row = $statement->fetch()) {
-            if(isset($this->allPages['pageInfo'][$row['page_uid']])) {
-                $this->allPages['pageInfo'][$row['page_uid']]['categories'][] = [
-                    'cat_id' => $row['category_uid'],
-                    'title' => $row['title'],
+            $categories[$row['page_uid']] = $row;
+        }
+        if(count($categories) === 0) {
+            // fetch categories from default language as fallback
+            $catJoinCol = 'uid';
+
+            $categoryQuery = "
+                SELECT
+                    cmm.uid_local AS category_uid, 
+                    cmm.uid_foreign AS page_uid,
+                    c.title,
+                    c.sys_language_uid
+                FROM
+                    sys_category_record_mm cmm JOIN sys_category c ON c." . $catJoinCol . " = cmm.uid_local
+                WHERE
+                    cmm.tablenames = 'pages' 
+                    AND cmm.fieldname = 'categories'
+                    AND FIND_IN_SET(cmm.uid_foreign, '" . implode(',', $this->allPages['uids']) . "')
+                    AND c.hidden = 0
+                    AND c.deleted = 0
+                    AND c.starttime <= UNIX_TIMESTAMP()
+                    AND IF(c.endtime = 0, true, (c.endtime >= UNIX_TIMESTAMP()))
+            ";
+
+            $statement = $this->dbConnections['sys_category_record_mm']->prepare($categoryQuery);
+            $statement->execute();
+            while ($row = $statement->fetch()) {
+                $categories[$row['page_uid']] = $row;
+            }
+        }
+
+        foreach($this->allPages['pageInfo'] as $pageInfo) {
+            if(isset($categories[$pageInfo['uid']]) || isset($categories[$pageInfo['l10n_parent']])) {
+                $cat = $categories[$pageInfo['l10n_parent']] ? $categories[$pageInfo['l10n_parent']] : $categories[$pageInfo['uid']];
+                $this->allPages['pageInfo'][$pageInfo['uid']]['categories'][] = [
+                    'cat_id' => $cat['category_uid'],
+                    'title' => $cat['title'],
                 ];
             }
         }
+        
+
+        
     }
 
     protected function getAllFilterCategories($mode = 'selected')
