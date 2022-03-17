@@ -136,6 +136,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             'p.tx_sectioncontent_abstract_image_3',
             'p.tx_sectioncontent_abstract_image_4',
             'p.tx_sectioncontent_abstract_reference_url',
+            'p.l10n_parent',
         ];
 
         $this->baseQuery = "
@@ -289,27 +290,42 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             $row['categories'] = [];
             $this->allPages['uids'][$row['uid']] = $row['uid'];
             $this->allPages['pageInfo'][$row['uid']] = $row;
+            if($row['sys_language_uid'] > 0 && $row['l10n_parent']) {
+                $this->allPages['uids'][$row['l10n_parent']] = $row['l10n_parent'];
+            }
         }
 
         $this->handleCategories();
         $this->addPageCategories();
 
         if ($this->onlyIncluded == true) {
-            foreach ($this->includePages as $pageUid) {
-                $this->pages['uids'][$pageUid] = $pageUid;
-                $this->pages['pageInfo'][$pageUid] = $this->allPages['pageInfo'][$pageUid];
+            foreach($this->allPages['pageInfo'] as $pageInfo) {
+                if($pageInfo['sys_language_uid'] > 0 && (in_array($pageInfo['l10n_parent'], $this->includePages) || in_array($pageInfo['uid'], $this->includePages))) {
+                    $this->pages['uids'][$pageInfo['uid']] = $pageInfo['uid'];
+                    $this->pages['pageInfo'][$pageInfo['uid']] = $pageInfo;
+                } else if($pageInfo['sys_language_uid'] == 0 && $pageInfo['uid'] && in_array($pageInfo['uid'], $this->includePages)) {
+                    $this->pages['uids'][$pageInfo['uid']] = $pageInfo['uid'];
+                    $this->pages['pageInfo'][$pageInfo['uid']] = $pageInfo;
+                }
             }
         } else {
-            foreach ($this->excludePages as $pageUid) {
-                unset($this->allPages['uids'][$pageUid]);
-                unset($this->allPages['pageInfo'][$pageUid]);
+            foreach($this->allPages['pageInfo'] as $pageInfo) {
+                if($pageInfo['sys_language_uid'] > 0 && (in_array($pageInfo['l10n_parent'], $this->excludePages) || in_array($pageInfo['uid'], $this->excludePages))) {
+                    unset($this->allPages['uids'][$pageInfo['uid']]);
+                    unset($this->allPages['pageInfo'][$pageInfo['uid']]);
+                } else if($pageInfo['sys_language_uid'] == 0 && $pageInfo['uid'] && in_array($pageInfo['uid'], $this->excludePages)) {
+                    unset($this->allPages['uids'][$pageInfo['uid']]);
+                    unset($this->allPages['pageInfo'][$pageInfo['uid']]);
+                }
             }
-
             $this->pages = $this->allPages;
+        }
+        $this->pages['uids'] = [];
+        foreach($this->pages['pageInfo'] as $pageInfo) {
+            $this->pages['uids'][$pageInfo['uid']] = $pageInfo['uid'];
         }
 
         $this->getFileReferences();
-
         foreach ($this->pages['pageInfo'] as &$pageInfo) {
             $pageInfo = $this->getPageData($pageInfo);
         }
