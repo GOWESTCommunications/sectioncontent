@@ -147,7 +147,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             WHERE
                 (
                     (
-                        FIND_IN_SET(pid, '###SELECTED_UIDS###')
+                        pid IN (###SELECTED_UIDS###)
                     )
                     AND sys_language_uid = ###SYS_LANGUAGE_UID###
                 )
@@ -167,8 +167,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             WHERE
                 (
                     (
-                        FIND_IN_SET(uid, '###SELECTED_UIDS###')
-                        OR FIND_IN_SET(l10n_parent, '###SELECTED_UIDS###')
+                        uid IN (###SELECTED_UIDS###)
+                        OR l10n_parent IN (###SELECTED_UIDS###)
                     )
                     AND sys_language_uid = ###SYS_LANGUAGE_UID###
                 )
@@ -190,8 +190,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 WHERE
                 (
                     (
-                        FIND_IN_SET(p.uid, '###SELECTED_UIDS###')
-                        OR FIND_IN_SET(p.l10n_parent, '###SELECTED_UIDS###')
+                        p.uid IN (###SELECTED_UIDS###)
+                        OR p.l10n_parent IN (###SELECTED_UIDS###)
                     )
                     AND p.sys_language_uid = ###SYS_LANGUAGE_UID###
                 )
@@ -395,7 +395,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             WHERE
                 cmm.tablenames = 'pages' 
                 AND cmm.fieldname = 'categories'
-                AND FIND_IN_SET(cmm.uid_foreign, '" . implode(',', $this->allPages['uids']) . "')
+                AND cmm.uid_foreign IN (" . implode(',', $this->allPages['uids']) . ")
                 AND c.hidden = 0
                 AND c.deleted = 0
                 AND c.starttime <= UNIX_TIMESTAMP()
@@ -423,7 +423,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 WHERE
                     cmm.tablenames = 'pages' 
                     AND cmm.fieldname = 'categories'
-                    AND FIND_IN_SET(cmm.uid_foreign, '" . implode(',', $this->allPages['uids']) . "')
+                    AND cmm.uid_foreign IN (" . implode(',', $this->allPages['uids']) . ")
                     AND c.hidden = 0
                     AND c.deleted = 0
                     AND c.starttime <= UNIX_TIMESTAMP()
@@ -565,20 +565,20 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         }
 
         if (!empty($this->settings['showDoktypes'])) {
-            $addWhereArr[] = "FIND_IN_SET(p.doktype, '" . $this->settings['showDoktypes'] . "')";
+            $addWhereArr[] = "p.doktype IN (" . $this->settings['showDoktypes'] . ")";
         }
 
         if ($this->settings['hideCurrentPage'] == '1') {
-            $specialAddWhereArr[] = " NOT FIND_IN_SET(p.uid, '" . $this->currentPageUid . "')";
+            $specialAddWhereArr[] = " p.uid NOT IN (" . $this->currentPageUid . ")";
         }
         
         if ($this->settings['ignoreUids']) {
-            $specialAddWhereArr[] = " NOT FIND_IN_SET(p.uid, '" . $this->settings['ignoreUids'] . "')";
+            $specialAddWhereArr[] = " p.uid NOT IN (" . $this->settings['ignoreUids'] . ")";
         }
 
 
         if($this->settings['source'] == 'thisChildrenRecursively' || $this->settings['source'] == 'customChildrenRecursively') {
-            $specialAddWhereArr[] = " NOT FIND_IN_SET(p.uid, '" . $this->rootPageUids . "')";
+            $specialAddWhereArr[] = " p.uid NOT IN (" . $this->rootPageUids . ")";
 
             if($this->settings['recursionDepthFrom'] > 0) {
                 $specialAddWhereArr[] = " level >= " . (int)$this->settings['recursionDepthFrom'] . " ";
@@ -610,7 +610,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 tablenames = 'pages'
                 AND hidden = 0
                 AND deleted = 0
-                AND FIND_IN_SET(uid_foreign, '###PAGE_UIDS###')
+                AND uid_foreign IN (###PAGE_UIDS###)
         ";
 
 
@@ -654,7 +654,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                     WHERE
                         tablenames = 'pages' 
                         AND fieldname = 'categories'
-                        AND FIND_IN_SET(uid_foreign, " . $this->currentPageUid . ")
+                        AND uid_foreign IN (" . $this->currentPageUid . ")
                 ";
 
 
@@ -676,8 +676,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 WHERE
                     tablenames = 'pages' 
                     AND fieldname = 'categories'
-                    AND FIND_IN_SET(uid_local, '###CATEGORY_LIST###')
-                    AND FIND_IN_SET(uid_foreign, '###PAGE_UIDS###')
+                    AND uid_local IN (###CATEGORY_LIST###)
+                    AND uid_foreign IN (###PAGE_UIDS###)
             ";
 
 
