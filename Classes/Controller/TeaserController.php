@@ -383,7 +383,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     protected function addPageCategories() {
 
         $catJoinCol = ($this->sys_language_uid > 0) ? 'l10n_parent' : 'uid';
-
+        $this->allPages['uids'][] = 0;
         $categoryQuery = "
             SELECT
                 cmm.uid_local AS category_uid, 
