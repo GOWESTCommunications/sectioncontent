@@ -275,12 +275,12 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         );
 
         $this->allPages = [
-            'uids' => [],
+            'uids' => [0],
             'pageInfo' => [],
         ];
 
         $this->pages = [
-            'uids' => [],
+            'uids' => [0],
             'pageInfo' => [],
         ];
 
@@ -320,7 +320,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             }
             $this->pages = $this->allPages;
         }
-        $this->pages['uids'] = [];
+        $this->pages['uids'] = [0];
         foreach($this->pages['pageInfo'] as $pageInfo) {
             $this->pages['uids'][$pageInfo['uid']] = $pageInfo['uid'];
         }
@@ -383,7 +383,6 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     protected function addPageCategories() {
 
         $catJoinCol = ($this->sys_language_uid > 0) ? 'l10n_parent' : 'uid';
-        $this->allPages['uids'][] = 0;
         $categoryQuery = "
             SELECT
                 cmm.uid_local AS category_uid, 
