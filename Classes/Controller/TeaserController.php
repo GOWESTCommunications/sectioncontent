@@ -405,8 +405,9 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $statement->execute();
         $categories = [];
         while ($row = $statement->fetch()) {
-            $categories[$row['page_uid']] = $row;
+            $categories[$row['page_uid']][] = $row;
         }
+
         if(count($categories) === 0) {
             // fetch categories from default language as fallback
             $catJoinCol = 'uid';
@@ -432,22 +433,23 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             $statement = $this->dbConnections['sys_category_record_mm']->prepare($categoryQuery);
             $statement->execute();
             while ($row = $statement->fetch()) {
-                $categories[$row['page_uid']] = $row;
+                $categories[$row['page_uid']][] = $row;
             }
+            
+
         }
 
         foreach($this->allPages['pageInfo'] as $pageInfo) {
             if(isset($categories[$pageInfo['uid']]) || isset($categories[$pageInfo['l10n_parent']])) {
-                $cat = $categories[$pageInfo['l10n_parent']] ? $categories[$pageInfo['l10n_parent']] : $categories[$pageInfo['uid']];
-                $this->allPages['pageInfo'][$pageInfo['uid']]['categories'][] = [
-                    'cat_id' => $cat['category_uid'],
-                    'title' => $cat['title'],
-                ];
+                $cats = $categories[$pageInfo['l10n_parent']] ? $categories[$pageInfo['l10n_parent']] : $categories[$pageInfo['uid']];
+                foreach($cats as $cat) {
+                    $this->allPages['pageInfo'][$pageInfo['uid']]['categories'][] = [
+                        'cat_id' => $cat['category_uid'],
+                        'title' => $cat['title'],
+                    ];
+                }
             }
         }
-        
-
-        
     }
 
     protected function getAllFilterCategories($mode = 'selected')
