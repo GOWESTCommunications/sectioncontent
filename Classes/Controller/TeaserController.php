@@ -97,6 +97,10 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             'sys_file_reference'        => GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('sys_file_reference'),
             'sys_category_record_mm'    => GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('sys_category_record_mm'),
         ];
+        
+        foreach($this->settings as $key => $val) {
+            $this->settings[$key] = trim($val);
+        }
     }
 
     /**
