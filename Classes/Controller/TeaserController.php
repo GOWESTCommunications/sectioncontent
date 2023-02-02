@@ -97,10 +97,6 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             'sys_file_reference'        => GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('sys_file_reference'),
             'sys_category_record_mm'    => GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('sys_category_record_mm'),
         ];
-        
-        foreach($this->settings as $key => $val) {
-            $this->settings[$key] = trim($val);
-        }
     }
 
     /**
@@ -140,7 +136,6 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             'p.tx_sectioncontent_abstract_image_3',
             'p.tx_sectioncontent_abstract_image_4',
             'p.tx_sectioncontent_abstract_reference_url',
-            'p.l10n_parent',
         ];
 
         $this->baseQuery = "
@@ -151,11 +146,10 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             WHERE
                 (
                     (
-                        pid IN (###SELECTED_UIDS###)
+                        FIND_IN_SET(pid, '###SELECTED_UIDS###')
                     )
                     AND sys_language_uid = ###SYS_LANGUAGE_UID###
                 )
-                AND ((p.sys_language_uid = 0 AND p.l18n_cfg IN (0,2)) OR p.sys_language_uid > 0)
                 AND ###ADD_WHERE###
                 AND ###SPECIAL_ADD_WHERE###
             
@@ -171,12 +165,11 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             WHERE
                 (
                     (
-                        uid IN (###SELECTED_UIDS###)
-                        OR l10n_parent IN (###SELECTED_UIDS###)
+                        FIND_IN_SET(uid, '###SELECTED_UIDS###')
+                        OR FIND_IN_SET(l10n_parent, '###SELECTED_UIDS###')
                     )
                     AND sys_language_uid = ###SYS_LANGUAGE_UID###
                 )
-                AND ((p.sys_language_uid = 0 AND p.l18n_cfg IN (0,2)) OR p.sys_language_uid > 0)
                 AND ###ADD_WHERE###
                 AND ###SPECIAL_ADD_WHERE###
                     
@@ -194,8 +187,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 WHERE
                 (
                     (
-                        p.uid IN (###SELECTED_UIDS###)
-                        OR p.l10n_parent IN (###SELECTED_UIDS###)
+                        FIND_IN_SET(p.uid, '###SELECTED_UIDS###')
+                        OR FIND_IN_SET(p.l10n_parent, '###SELECTED_UIDS###')
                     )
                     AND p.sys_language_uid = ###SYS_LANGUAGE_UID###
                 )
@@ -209,7 +202,6 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 INNER JOIN 
                     collected_pages cp on p.pid = cp.uid
                 WHERE p.sys_language_uid = ###SYS_LANGUAGE_UID###
-                AND ((p.sys_language_uid = 0 AND p.l18n_cfg IN (0,2)) OR p.sys_language_uid > 0)
                 AND ###ADD_WHERE###
             )
             SELECT 
@@ -279,12 +271,12 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         );
 
         $this->allPages = [
-            'uids' => [0],
+            'uids' => [],
             'pageInfo' => [],
         ];
 
         $this->pages = [
-            'uids' => [0],
+            'uids' => [],
             'pageInfo' => [],
         ];
 
@@ -294,42 +286,27 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             $row['categories'] = [];
             $this->allPages['uids'][$row['uid']] = $row['uid'];
             $this->allPages['pageInfo'][$row['uid']] = $row;
-            if($row['sys_language_uid'] > 0 && $row['l10n_parent']) {
-                $this->allPages['uids'][$row['l10n_parent']] = $row['l10n_parent'];
-            }
         }
 
         $this->handleCategories();
         $this->addPageCategories();
 
         if ($this->onlyIncluded == true) {
-            foreach($this->allPages['pageInfo'] as $pageInfo) {
-                if($pageInfo['sys_language_uid'] > 0 && (in_array($pageInfo['l10n_parent'], $this->includePages) || in_array($pageInfo['uid'], $this->includePages))) {
-                    $this->pages['uids'][$pageInfo['uid']] = $pageInfo['uid'];
-                    $this->pages['pageInfo'][$pageInfo['uid']] = $pageInfo;
-                } else if($pageInfo['sys_language_uid'] == 0 && $pageInfo['uid'] && in_array($pageInfo['uid'], $this->includePages)) {
-                    $this->pages['uids'][$pageInfo['uid']] = $pageInfo['uid'];
-                    $this->pages['pageInfo'][$pageInfo['uid']] = $pageInfo;
-                }
+            foreach ($this->includePages as $pageUid) {
+                $this->pages['uids'][$pageUid] = $pageUid;
+                $this->pages['pageInfo'][$pageUid] = $this->allPages['pageInfo'][$pageUid];
             }
         } else {
-            foreach($this->allPages['pageInfo'] as $pageInfo) {
-                if($pageInfo['sys_language_uid'] > 0 && (in_array($pageInfo['l10n_parent'], $this->excludePages) || in_array($pageInfo['uid'], $this->excludePages))) {
-                    unset($this->allPages['uids'][$pageInfo['uid']]);
-                    unset($this->allPages['pageInfo'][$pageInfo['uid']]);
-                } else if($pageInfo['sys_language_uid'] == 0 && $pageInfo['uid'] && in_array($pageInfo['uid'], $this->excludePages)) {
-                    unset($this->allPages['uids'][$pageInfo['uid']]);
-                    unset($this->allPages['pageInfo'][$pageInfo['uid']]);
-                }
+            foreach ($this->excludePages as $pageUid) {
+                unset($this->allPages['uids'][$pageUid]);
+                unset($this->allPages['pageInfo'][$pageUid]);
             }
+
             $this->pages = $this->allPages;
-        }
-        $this->pages['uids'] = [0];
-        foreach($this->pages['pageInfo'] as $pageInfo) {
-            $this->pages['uids'][$pageInfo['uid']] = $pageInfo['uid'];
         }
 
         $this->getFileReferences();
+
         foreach ($this->pages['pageInfo'] as &$pageInfo) {
             $pageInfo = $this->getPageData($pageInfo);
         }
@@ -345,8 +322,6 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         $this->pages['link'] = $link;
         $this->pages['linktext'] = $this->settings['linktext'];
-
-        
         return json_encode($this->pages);
     }
 
@@ -375,9 +350,11 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         }
 
         $site = $this->siteFinder->getSiteByPageId($newPageInfo['uid']);
-        $newPageInfo['link'] = $site->getRouter()->generateUri($newPageInfo['uid'], ['L' => 1])->getPath();
+        
+        // $newPageInfo['link'] = $site->getRouter()->generateUri($newPageInfo['uid'])->getPath();
         $instructions = [
-            'parameter' =>  't3://page?uid='.$newPageInfo['uid'],
+            'parameter' => $newPageInfo['uid'],
+            'language' => $this->sys_language_uid,
         ];
         $newPageInfo['link'] = $this->contentObject->typoLink_URL($instructions);
 
@@ -387,6 +364,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     protected function addPageCategories() {
 
         $catJoinCol = ($this->sys_language_uid > 0) ? 'l10n_parent' : 'uid';
+
         $categoryQuery = "
             SELECT
                 cmm.uid_local AS category_uid, 
@@ -398,7 +376,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             WHERE
                 cmm.tablenames = 'pages' 
                 AND cmm.fieldname = 'categories'
-                AND cmm.uid_foreign IN (" . implode(',', $this->allPages['uids']) . ")
+                AND FIND_IN_SET(cmm.uid_foreign, '" . implode(',', $this->allPages['uids']) . "')
                 AND c.hidden = 0
                 AND c.deleted = 0
                 AND c.starttime <= UNIX_TIMESTAMP()
@@ -407,51 +385,12 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         $statement = $this->dbConnections['sys_category_record_mm']->prepare($categoryQuery);
         $statement->execute();
-        $categories = [];
         while ($row = $statement->fetch()) {
-            $categories[$row['page_uid']][] = $row;
-        }
-
-        if(count($categories) === 0) {
-            // fetch categories from default language as fallback
-            $catJoinCol = 'uid';
-
-            $categoryQuery = "
-                SELECT
-                    cmm.uid_local AS category_uid, 
-                    cmm.uid_foreign AS page_uid,
-                    c.title,
-                    c.sys_language_uid
-                FROM
-                    sys_category_record_mm cmm JOIN sys_category c ON c." . $catJoinCol . " = cmm.uid_local
-                WHERE
-                    cmm.tablenames = 'pages' 
-                    AND cmm.fieldname = 'categories'
-                    AND cmm.uid_foreign IN (" . implode(',', $this->allPages['uids']) . ")
-                    AND c.hidden = 0
-                    AND c.deleted = 0
-                    AND c.starttime <= UNIX_TIMESTAMP()
-                    AND IF(c.endtime = 0, true, (c.endtime >= UNIX_TIMESTAMP()))
-            ";
-
-            $statement = $this->dbConnections['sys_category_record_mm']->prepare($categoryQuery);
-            $statement->execute();
-            while ($row = $statement->fetch()) {
-                $categories[$row['page_uid']][] = $row;
-            }
-            
-
-        }
-
-        foreach($this->allPages['pageInfo'] as $pageInfo) {
-            if(isset($categories[$pageInfo['uid']]) || isset($categories[$pageInfo['l10n_parent']])) {
-                $cats = $categories[$pageInfo['l10n_parent']] ? $categories[$pageInfo['l10n_parent']] : $categories[$pageInfo['uid']];
-                foreach($cats as $cat) {
-                    $this->allPages['pageInfo'][$pageInfo['uid']]['categories'][] = [
-                        'cat_id' => $cat['category_uid'],
-                        'title' => $cat['title'],
-                    ];
-                }
+            if(isset($this->allPages['pageInfo'][$row['page_uid']])) {
+                $this->allPages['pageInfo'][$row['page_uid']]['categories'][] = [
+                    'cat_id' => $row['category_uid'],
+                    'title' => $row['title'],
+                ];
             }
         }
     }
@@ -516,7 +455,6 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->orderBy = 'uid ASC';
         $this->orderDirection = 'ASC';
         $this->limit = 99999999;
-        $this->offset = 0;
         if (!empty($this->settings['orderDirection'])) {
             $this->orderDirection = $this->settings['orderDirection'];
         }
@@ -527,23 +465,17 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             } else if($this->settings['orderBy'] === 'random') {
                 $this->orderBy = 'RAND()';
             } else {
-                $this->orderBy = str_replace("title", "teaser_title", $this->settings['orderBy']) . ' ' . $this->orderDirection;
+                $this->orderBy = $this->settings['orderBy'] . ' ' . $this->orderDirection;
             }
         }
-        if (!empty($this->settings['offset'])) {
-            $this->offset = $this->settings['offset'];
-        }
-        // if($this->settings['orderBy'] !== 'random') {
-        //     if (!empty($this->settings['limit'])) {
-        //         $this->limit = $this->settings['limit'];
-        //     }
+        if($this->settings['orderBy'] !== 'random') {
+            if (!empty($this->settings['limit'])) {
+                $this->limit = $this->settings['limit'];
+            }
 
-        //     if (!empty($this->settings['offset'])) {
-        //         $this->limit = $this->settings[offset''] . ',' . $this->settings['limit'];
-        //     }
-        // }
-        if(!empty($this->settings['orderByPlugin']) && $this->settings['source'] == 'custom' && $this->settings['customPages']) {
-            $this->orderBy = "FIELD(uid, ".$this->settings['customPages'].") ASC";
+            if (!empty($this->settings['offset'])) {
+                $this->limit = $this->settings['offset'] . ',' . $this->settings['limit'];
+            }
         }
     }
 
@@ -570,20 +502,20 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         }
 
         if (!empty($this->settings['showDoktypes'])) {
-            $addWhereArr[] = "p.doktype IN (" . $this->settings['showDoktypes'] . ")";
+            $addWhereArr[] = "FIND_IN_SET(p.doktype, '" . $this->settings['showDoktypes'] . "')";
         }
 
         if ($this->settings['hideCurrentPage'] == '1') {
-            $specialAddWhereArr[] = " p.uid NOT IN (" . $this->currentPageUid . ")";
+            $specialAddWhereArr[] = " NOT FIND_IN_SET(p.uid, '" . $this->currentPageUid . "')";
         }
         
         if ($this->settings['ignoreUids']) {
-            $specialAddWhereArr[] = " p.uid NOT IN (" . $this->settings['ignoreUids'] . ")";
+            $specialAddWhereArr[] = " NOT FIND_IN_SET(p.uid, '" . $this->settings['ignoreUids'] . "')";
         }
 
 
         if($this->settings['source'] == 'thisChildrenRecursively' || $this->settings['source'] == 'customChildrenRecursively') {
-            $specialAddWhereArr[] = " p.uid NOT IN (" . $this->rootPageUids . ")";
+            $specialAddWhereArr[] = " NOT FIND_IN_SET(p.uid, '" . $this->rootPageUids . "')";
 
             if($this->settings['recursionDepthFrom'] > 0) {
                 $specialAddWhereArr[] = " level >= " . (int)$this->settings['recursionDepthFrom'] . " ";
@@ -615,7 +547,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 tablenames = 'pages'
                 AND hidden = 0
                 AND deleted = 0
-                AND uid_foreign IN (###PAGE_UIDS###)
+                AND FIND_IN_SET(uid_foreign, '###PAGE_UIDS###')
         ";
 
 
@@ -643,7 +575,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->categories = [];
         if (!empty($this->settings['categoriesList']) && !empty($this->settings['categoryMode'])) {
             $filterCategories = GeneralUtility::trimExplode(',', $this->settings['categoriesList'], true);
-            
+
             if (
 
                 (int)$this->settings['categoryMode'] == $this::CATEGORY_MODE_CURRENT_AND
@@ -659,10 +591,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                     WHERE
                         tablenames = 'pages' 
                         AND fieldname = 'categories'
-                        AND uid_foreign IN (" . $this->currentPageUid . ")
+                        AND FIND_IN_SET(uid_foreign, " . $this->currentPageUid . ")
                 ";
-
-
 
                 $statement = $this->dbConnections['sys_category_record_mm']->prepare($this->categoryQuery);
                 $statement->execute();
@@ -681,8 +611,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 WHERE
                     tablenames = 'pages' 
                     AND fieldname = 'categories'
-                    AND uid_local IN (###CATEGORY_LIST###)
-                    AND uid_foreign IN (###PAGE_UIDS###)
+                    AND FIND_IN_SET(uid_local, '###CATEGORY_LIST###')
+                    AND FIND_IN_SET(uid_foreign, '###PAGE_UIDS###')
             ";
 
 
@@ -701,16 +631,15 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 $this->categoryQuery
             );
 
+
+
             $statement = $this->dbConnections['sys_category_record_mm']->prepare($this->categoryQuery);
             $statement->execute();
-
-            // add empty category in case no page match that only included are used
-            $this->categories[0][0] = 0;
             while ($row = $statement->fetch()) {
                 // Do something with that single row
                 $this->categories[$row['uid_foreign']][$row['uid_local']] = $row['uid_local'];
             }
-            
+
             foreach ($this->categories as $page_id => $catInfo) {
                 switch ((int)$this->settings['categoryMode']) {
                     case $this::CATEGORY_MODE_OR:
@@ -769,10 +698,13 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         foreach($pages['pageInfo'] as $page) {
             $sorted[] = $page;
         }
-        $limit = !empty($this->settings['limit']) ? $this->settings['limit'] : count($sorted);
-        $sorted = array_slice($sorted, $this->offset, $limit);
-        foreach($sorted as $page) {
-            $newUids[$page['uid']] = $page['uid'];
+
+        // add the limit for random sorting later
+        if($this->settings['orderBy'] === 'random' && !empty($this->settings['limit'])) {
+            $sorted = array_slice($sorted, 0, $this->settings['limit']);
+            foreach($sorted as $page) {
+                $newUids[$page['uid']] = $page['uid'];
+            }
         }
 
         return [
