@@ -218,6 +218,49 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             ORDER BY ###ORDER_BY###
             LIMIT ###LIMIT###;
         ";
+        
+        if($this->sys_language_uid > 0) {
+            $this->baseQueryRecursive = "
+                WITH RECURSIVE collected_pages as (
+                    SELECT
+                        p.*,
+                        0 as level
+                    FROM
+                        pages p
+                    WHERE
+                    (
+                        (
+                            p.uid IN (###SELECTED_UIDS###)
+                            OR p.l10n_parent IN (###SELECTED_UIDS###)
+                        )
+                        AND p.sys_language_uid = 0
+                    )
+                    AND ###ADD_WHERE###
+                    UNION ALL
+                    SELECT
+                        p.*,
+                        cp.level+1 as level
+                    FROM
+                        pages p
+                    INNER JOIN 
+                        collected_pages cp on p.pid = cp.uid
+                    WHERE p.sys_language_uid = 0
+                    AND ((p.sys_language_uid = 0 AND p.l18n_cfg IN (0,2)) OR p.sys_language_uid > 0)
+                    AND ###ADD_WHERE###
+                )
+                SELECT 
+                    ###SELECT_FIELDS###,
+                    level
+                FROM 
+                    collected_pages cp
+                    JOIN pages p ON p.l10n_parent = cp.uid
+                WHERE
+                ###SPECIAL_ADD_WHERE###
+                AND p.sys_language_uid =  ###SYS_LANGUAGE_UID###
+                ORDER BY ###ORDER_BY###
+                LIMIT ###LIMIT###;
+            ";
+        }
 
         switch ($this->settings['source']) {
             default:
