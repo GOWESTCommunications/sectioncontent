@@ -35,7 +35,6 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use FriendsOfTYPO3\Headless\Utility\FileUtility;
 
@@ -87,7 +86,6 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
-        $this->siteFinder = $this->objectManager->get(SiteFinder::class);
         $this->imageService = $this->objectManager->get(ImageService::class);
         $this->settings = $this->settingsUtility->renderConfigurationArray($this->settings);
         $this->languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
@@ -348,10 +346,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 }
             }
         }
-
-        $site = $this->siteFinder->getSiteByPageId($newPageInfo['uid']);
         
-        // $newPageInfo['link'] = $site->getRouter()->generateUri($newPageInfo['uid'])->getPath();
         $instructions = [
             'parameter' => $newPageInfo['uid'],
             'language' => $this->sys_language_uid,
