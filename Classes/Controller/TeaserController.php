@@ -256,6 +256,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                     JOIN pages p ON p.l10n_parent = cp.uid
                 WHERE
                 ###SPECIAL_ADD_WHERE###
+                AND ###ADD_WHERE###
                 AND p.sys_language_uid =  ###SYS_LANGUAGE_UID###
                 ORDER BY ###ORDER_BY###
                 LIMIT ###LIMIT###;
@@ -619,6 +620,10 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         
         if ($this->settings['ignoreUids']) {
             $specialAddWhereArr[] = " p.uid NOT IN (" . $this->settings['ignoreUids'] . ")";
+
+            if($this->sys_language_uid > 0) {
+                $specialAddWhereArr[] = " p.l10n_parent NOT IN (" . $this->settings['ignoreUids'] . ")";
+            }
         }
 
 
@@ -641,6 +646,9 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         } else {
             $this->specialAddWhere = '1';
         }
+
+        
+
     }
 
     protected function getFileReferences()
