@@ -1,6 +1,6 @@
 <?php
 
-namespace GoWest\Sectioncontent\Backend;
+namespace GOWEST\Sectioncontent\Backend;
 
 class ItemsProcFunc
 {

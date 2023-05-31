@@ -1,58 +1,253 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2015-12-23T14:21:42Z">
-		<header>
-			<description>Language labels for the Sectioncontent extension in the FRONTEND</description>
-			<authorName>Michael Nußbaumer</authorName>
-			<authorEmail>m.nussbaumer@go-west.at</authorEmail>
-			<generator>LFEditor</generator>
-		</header>
-		<body>
-                    <trans-unit id="tx_sectioncontent_new_tab">
-                            <source>Overview settings</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_title">
-                            <source>Overview title</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_subtitle">
-                            <source>Overview subtitle</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_description">
-                            <source>Overview description</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_image">
-                            <source>Overview image 1</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_image_2">
-                            <source>Overview image 2</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_reference_url">
-                            <source>This page links to</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_attr_1">
-                            <source>Attribute 1</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_attr_2">
-                            <source>Attribute 2</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_attr_3">
-                            <source>Attribute 3</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_attr_4">
-                            <source>Attribute 4</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_attr_5">
-                            <source>Attribute 5</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_attr_6">
-                            <source>Attribute 6</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_attr_7">
-                            <source>Attribute 7</source>
-                    </trans-unit>
-                    <trans-unit id="tx_sectioncontent_abstract_attr_8">
-                            <source>Attribute 8</source>
-                    </trans-unit>
-		</body>
-	</file>
+  <file source-language="en" datatype="plaintext" original="messages" date="2015-12-23T14:21:42Z">
+    <header>
+      <description>Language labels for the Sectioncontent extension in the FRONTEND</description>
+      <authorName>Michael Nußbaumer</authorName>
+      <authorEmail>m.nussbaumer@go-west.at</authorEmail>
+      <generator>LFEditor</generator>
+    </header>
+    <body>
+      <trans-unit id="tx_sectioncontent_new_tab">
+        <source>Overview settings</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_title">
+        <source>Overview title</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_subtitle">
+        <source>Overview subtitle</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_description">
+        <source>Overview description</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_image">
+        <source>Overview image 1</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_image_2">
+        <source>Overview image 2</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_reference_url">
+        <source>This page links to</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_attr_1">
+        <source>Attribute 1</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_attr_2">
+        <source>Attribute 2</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_attr_3">
+        <source>Attribute 3</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_attr_4">
+        <source>Attribute 4</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_attr_5">
+        <source>Attribute 5</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_attr_6">
+        <source>Attribute 6</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_attr_7">
+        <source>Attribute 7</source>
+      </trans-unit>
+      <trans-unit id="tx_sectioncontent_abstract_attr_8">
+        <source>Attribute 8</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.sheetGeneral">
+        <source>General preferences</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.general">
+        <source>General preferences</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.ordering">
+        <source>Visibility options</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.enableFields">
+        <source>EnableFields</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.template">
+        <source>Template</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.layout">
+        <source>Layout</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.default">
+        <source></source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.yes">
+        <source>Yes</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.no">
+        <source>No</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.sourceLabel">
+        <source>Teaser source:</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.source.thisChildren">
+        <source>Childpages of current page</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.source.thisChildrenRecursively">
+        <source>Childpages of current page (recursively)</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.source.custom">
+        <source>Selected pages</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.source.customChildren">
+        <source>Childpages of selected pages</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.source.customChildrenRecursively">
+        <source>Childpages of selected pages (recursively)</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.customPages">
+        <source>Custom Pages:</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.recursionDepthFrom">
+        <source>Recursion depth (from):</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.recursionDepth">
+        <source>Recursion depth (to):</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.loadContents">
+        <source>Load content elements of each page for use in template (requires more performance):</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.orderByPlugin">
+        <source>Order selected pages as in the list above (this will overwrite the order settings in visibility options tab)</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.pageMode">
+        <source>Page mode:</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.pageMode.flat">
+        <source>Flat</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.pageMode.nested">
+        <source>Nested</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.order">
+        <source>Order by:</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.order.crdate">
+        <source>Creation Date</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.order.tstamp">
+        <source>Modification Date</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.order.starttime">
+        <source>Publish Date</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.order.endtime">
+        <source>Expiration Date</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.order.newtime">
+        <source>Marked as new Date</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.order.sorting">
+        <source>Sorting in pagetree</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.order.title">
+        <source>Title (alphabetical)</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.order.random">
+        <source>Random</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.order.customField">
+        <source>Custom field</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.orderByCustomField">
+        <source>Custom field to order by (throws exception, if field doesn't exists):</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.orderDirection">
+        <source>Order direction:</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.orderDirection.asc">
+        <source>Ascending (A-Z, oldest and fewest first)</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.orderDirection.desc">
+        <source>Descending (Z-A, newest and most first)</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.limit">
+        <source>Limit (max. number of pages to show):</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.offset">
+        <source>Offset (skip the first X entries):</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.showNavHiddenItems">
+        <source>Show pages which are hidden for navigation:</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.hideCurrentPage">
+        <source>Hide current page from list:</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.showDoktypes">
+        <source>Show pages with doktypes (comma separated, leave empty to show all):</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.ignoreUids">
+        <source>Ignore the following pages by uid (comma separated):</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.categories">
+        <source>Filter by categories:</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.categoryMode">
+        <source>Category mode:</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.categoryMode.or">
+        <source>Show pages with selected categories (OR)</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.categoryMode.and">
+        <source>Show pages with selected categories (AND)</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.categoryMode.orNot">
+        <source>Do NOT show pages with selected categories (OR)</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.categoryMode.andNot">
+        <source>Do NOT show pages with selected categories (AND)</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.categoryMode.currentPageAnd">
+        <source>Show pages which have all categories of the current page (AND)</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.categoryMode.currentPageOr">
+        <source>Show pages which have one of the categories of the current page (OR)</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.templateType">
+        <source>Template type:</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.templateType.file">
+        <source>HTML file</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.templateType.directory">
+        <source>Fluid template directory</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.templateRootFile">
+        <source>Template file (with fullpath, example: fileadmin/templates/sectioncontent/Example.html):</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.templateRootPath">
+        <source>Template directory (with fullpath, example: fileadmin/templates/sectioncontent/):</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.partialRootPath">
+        <source>Partial directory (with fullpath, example: fileadmin/templates/sectioncontent/Partials/):</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.layoutRootPath">
+        <source>Layouts directory (with fullpath, example: fileadmin/templates/sectioncontent/Layouts/):</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.jsFiltersheet">
+        <source>Javascript Filter</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.jsFiltertype">
+        <source>Filter type</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.noJsFilter">
+        <source>no filter</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.jsFilterSelected">
+        <source>Selected categories</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.jsFilterChildOfSelected">
+        <source>Children of selected categories</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.filterCategories">
+        <source>Filter categories</source>
+      </trans-unit>
+      <trans-unit id="sectioncontent.pi_flexform.resetJsFilter">
+        <source>Reset all other filters on select</source>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>

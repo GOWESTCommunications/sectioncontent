@@ -1,27 +1,17 @@
 <?php
-if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
-}
+declare(strict_types=1);
 
-$extConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['sectioncontent']);
-$actionNotToCache = '';
-if ($extConfiguration['ENABLECACHE'] == '0') {
-    $actionNotToCache = 'index';
-}
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-    'GoWest.sectioncontent',
+use GOWEST\Sectioncontent\Controller\TeaserController;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+
+defined('TYPO3') or die();
+
+ExtensionUtility::configurePlugin(
+    'Sectioncontent',
     'Pi1',
     [
-        'Teaser' => 'index',
+        TeaserController::class => 'index'
     ],
-    [
-        'Teaser' => $actionNotToCache,
-    ]
+    []
 );
-
-// Constants
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript('sectioncontent', 'constants', ' <INCLUDE_TYPOSCRIPT: source="FILE:EXT:sectioncontent/Configuration/TypoScript/constants.typoscript">');
-
-// Setup     
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript('sectioncontent', 'setup', ' <INCLUDE_TYPOSCRIPT: source="FILE:EXT:sectioncontent/Configuration/TypoScript/setup.typoscript">');

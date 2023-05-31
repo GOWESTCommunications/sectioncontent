@@ -1,22 +1,24 @@
 {
     "name": "gowest/sectioncontent",
     "type": "typo3-cms-extension",
-    "description": "Create page teaser JSON for use as Headless",
-    "version": "10.1.19",
-    "homepage": "http://go-west.at",
-    "license": [
-        "GPL-2.0+"
-    ],
+    "description": "Create page teasers with data from page properties and its content elements.",
+    "version": "12.0.2",
+    "homepage": "https://go-west.at",
+    "license": ["GPL-2.0-or-later"],
+    "keywords": ["TYPO3 CMS"],
     "require": {
-        "typo3/cms-core": ">=10.0"
+        "typo3/cms-core": "^12.4",
+        "friendsoftypo3/headless": "^4.0"
     },
     "autoload": {
         "psr-4": {
-            "GoWest\\Sectioncontent\\": "Classes"
+            "GOWEST\\Sectioncontent\\": "Classes/"
         }
     },
-    "replace": {
-        "sectioncontent": "*"
+    "autoload-dev": {
+      "psr-4": {
+        "GOWEST\\Sectioncontent\\": "Classes/"
+      }
     },
     "extra": {
         "typo3/cms": {

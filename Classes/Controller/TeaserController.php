@@ -1,6 +1,8 @@
 <?php
 
-namespace GoWest\Sectioncontent\Controller;
+declare(strict_types=1);
+
+namespace GOWEST\Sectioncontent\Controller;
 
 /***************************************************************
  *  Copyright notice
@@ -32,11 +34,11 @@ use TYPO3\CMS\Extbase\Mvc\View\JsonView;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use FriendsOfTYPO3\Headless\Utility\FileUtility;
+use GOWEST\Sectioncontent\Utility\Settings;
 
 /**
  * Controller for the Teaser object
@@ -51,16 +53,14 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      */
     protected $settings = [];
 
+    
+    protected ImageService $imageService;
+
     /**
      * @var integer
      */
     protected $currentPageUid = null;
 
-    /**
-     * @var \GoWest\Sectioncontent\Utility\Settings
-     * @TYPO3\CMS\Extbase\Annotation\Inject
-     */
-    protected $settingsUtility;
 
     protected $defaultViewObjectName = JsonView::class;
 
@@ -77,17 +77,19 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     /** Category Mode: Current Page Categories Or */
     const CATEGORY_MODE_CURRENT_OR = 6;
 
+    public function __construct()
+    {
+        $this->imageService = GeneralUtility::makeInstance(ImageService::class);
+    }
+
     /**
      * Initialize Action will performed before each action will be executed
      *
-     * @return void
+     * @internal
      */
     public function initializeAction()
-    {
-        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+    {   
         $this->contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
-        $this->imageService = $this->objectManager->get(ImageService::class);
-        $this->settings = $this->settingsUtility->renderConfigurationArray($this->settings);
         $this->languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
         $this->sys_language_uid = $this->languageAspect->getId();
         $this->dbConnections = [
@@ -101,14 +103,18 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         }
     }
 
+    protected function getSettingsUtility(): Settings
+    {
+        return GeneralUtility::makeInstance(Settings::class);
+    }
+
     /**
      * Displays teasers
      *
-     * @return void
+     * @internal
      */
     public function indexAction()
     {
-
         $this->currentPageUid = $GLOBALS['TSFE']->id;
         $this->includePages = [];
         $this->excludePages = [];
@@ -291,7 +297,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
                 break;
         }
         $this->baseQueryRaw = $this->baseQuery;
-        $this->rootPageUidsArr = GeneralUtility::intExplode(',', $this->rootPageUids);
+        $this->rootPageUidsArr = GeneralUtility::trimExplode(',', (string)$this->rootPageUids);
 
 
         $this->setOrderingAndLimitation();
@@ -331,8 +337,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         ];
 
         $statement = $this->dbConnections['pages']->prepare($this->baseQuery);
-        $statement->execute();
-        while ($row = $statement->fetch()) {
+        $result = $statement->executeQuery();
+        while ($row = $result->fetchAssociative()) {
             $row['categories'] = [];
             $this->allPages['uids'][$row['uid']] = $row['uid'];
             $this->allPages['pageInfo'][$row['uid']] = $row;
@@ -389,7 +395,9 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->pages['linktext'] = $this->settings['linktext'];
 
         
-        return json_encode($this->pages);
+        return $this->responseFactory->createResponse()
+        ->withAddedHeader('Content-Type', 'application/json; charset=utf-8')
+        ->withBody($this->streamFactory->createStream(json_encode($this->pages)));
     }
 
     protected function getPageData($pageInfo)
@@ -405,12 +413,12 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         foreach ($mediaFields as $mediaField) {
             $newPageInfo[$mediaField] = [];
-            if (is_array($this->fileReferences[$newPageInfo['uid']][$mediaField])) {
+            if (count($this->fileReferences) > 0 && is_array($this->fileReferences[$newPageInfo['uid']][$mediaField])) {
 
                 foreach ($this->fileReferences[$newPageInfo['uid']][$mediaField] as $fileReference) {
-                    $image = $this->imageService->getImage($fileReference['uid'], null, true);
+                    $image = $this->imageService->getImage((string)$fileReference['uid'], null, true);
                     $image = $this->getFileUtility()->processFile($image);
-                    $image['properties']['crop'] = json_decode($image['properties']['crop'], 1);
+                    $image['properties']['crop'] = json_decode($image['properties']['crop'], true);
                     $newPageInfo[$mediaField][] = $image;
                 }
             }
@@ -447,9 +455,9 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         ";
 
         $statement = $this->dbConnections['sys_category_record_mm']->prepare($categoryQuery);
-        $statement->execute();
+        $result = $statement->executeQuery();
         $categories = [];
-        while ($row = $statement->fetch()) {
+        while ($row = $result->fetchAssociative()) {
             $categories[$row['page_uid']][] = $row;
         }
 
@@ -476,8 +484,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             ";
 
             $statement = $this->dbConnections['sys_category_record_mm']->prepare($categoryQuery);
-            $statement->execute();
-            while ($row = $statement->fetch()) {
+            $result = $statement->executeQuery();
+            while ($row = $result->fetchAssociative()) {
                 $categories[$row['page_uid']][] = $row;
             }
             
@@ -500,7 +508,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     protected function getAllFilterCategories($mode = 'selected')
     {
 
-        $selectedCategories = GeneralUtility::trimExplode(',', $this->settings['filterCategories'], true);
+        $selectedCategories = GeneralUtility::trimExplode(',', (string)$this->settings['filterCategories'], true);
         $allCategories = $this->categoryRepository->findAll();
         $return = array();
 
@@ -679,8 +687,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
 
         $statement = $this->dbConnections['sys_file_reference']->prepare($this->fileReferenceQuery);
-        $statement->execute();
-        while ($row = $statement->fetch()) {
+        $result = $statement->executeQuery();
+        while ($row = $result->fetchAssociative()) {
             // Do something with that single row
             $this->fileReferences[$row['uid_foreign']][$row['fieldname']][$row['uid']] = $row;
         }
@@ -690,7 +698,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     {
         $this->categories = [];
         if (!empty($this->settings['categoriesList']) && !empty($this->settings['categoryMode'])) {
-            $filterCategories = GeneralUtility::trimExplode(',', $this->settings['categoriesList'], true);
+            $filterCategories = GeneralUtility::trimExplode(',', (string)$this->settings['categoriesList'], true);
             
             if (
 
@@ -713,8 +721,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
 
                 $statement = $this->dbConnections['sys_category_record_mm']->prepare($this->categoryQuery);
-                $statement->execute();
-                while ($row = $statement->fetch()) {
+                $result = $statement->executeQuery();
+                while ($row = $result->fetchAssociative()) {
                     // Do something with that single row
                     $filterCategories[$row['uid_local']] = $row['uid_local'];
                 }
@@ -750,11 +758,11 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             );
 
             $statement = $this->dbConnections['sys_category_record_mm']->prepare($this->categoryQuery);
-            $statement->execute();
+            $result = $statement->executeQuery();
 
             // add empty category in case no page match that only included are used
             $this->categories[0][0] = 0;
-            while ($row = $statement->fetch()) {
+            while ($row = $result->fetchAssociative()) {
                 // Do something with that single row
                 $this->categories[$row['uid_foreign']][$row['uid_local']] = $row['uid_local'];
             }

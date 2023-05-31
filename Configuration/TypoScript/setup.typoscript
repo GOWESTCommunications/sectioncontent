@@ -1,63 +1,14 @@
-plugin.tx_sectioncontent {
-    view {
-        templateRootPath {
-            10 = EXT:sectioncontent/Resources/Private/Templates/
-            200 = {$plugin.tx_sectioncontent.view.templateRootPath}
-        }
-        partialRootPath {
-            10 = EXT:sectioncontent/Resources/Private/Partials/
-            200 = {$plugin.tx_sectioncontent.view.partialRootPath}
-        }
-        layoutRootPath {
-            10 = EXT:sectioncontent/Resources/Private/Layouts/
-            200 = {$plugin.tx_sectioncontent.view.layoutRootPath}
-        }
-    }
-    persistence {
-        storagePid = {$plugin.tx_sectioncontent.persistence.storagePid}
-    }
-}
-
-
-lib.tx_sectioncontent = USER
-lib.tx_sectioncontent {
-    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
-    
-    vendorName = GoWest
-    extensionName = Sectioncontent
-    pluginName = Pi1
-    
-    settings =< plugin.tx_sectioncontent.settings
-        
-    persistence =< plugin.tx_sectioncontent.persistence
-    view =< plugin.tx_sectioncontent.view
-}
-
 
 tt_content.list =< lib.contentElementWithHeader
-tt_content.list {
-    fields {
-        content {
-            fields {
-                data = CASE
-                data {
-                    key.field = list_type
-
-                    sectioncontent_pi1 = USER
-                    sectioncontent_pi1 {
-                        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
-                        vendorName = GoWest
-                        extensionName = Sectioncontent
-                        pluginName = Pi1
-                        controller = Teaser
-
-                        view < plugin.tx_sectioncontent.view
-                        persistence < plugin.tx_sectioncontent.persistence
-                        settings < plugin.tx_sectioncontent.settings
-                    }
-                }
-            }
-
-        }
+tt_content.list.fields.content.fields.data = CASE
+tt_content.list.fields.content.fields.data {
+    key.field = list_type
+    sectioncontent_pi1 = USER
+    sectioncontent_pi1 {
+        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+        vendorName = GOWEST
+        extensionName = Sectioncontent
+        pluginName = Pi1
+        controller = Teaser
     }
 }
