@@ -16,6 +16,7 @@ class ItemsProcFunc
             ? $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['sectioncontent_pi1']['layouts']
             : [
                 ['Default', 'default'],
+                ['Layout 1', 'layout1'],
             ];
     }
 }

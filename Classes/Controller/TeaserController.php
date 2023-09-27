@@ -424,6 +424,14 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             }
         }
 
+        if($newPageInfo["tx_sectioncontent_abstract_reference_url"] !== null) {
+            $instructions = [
+                'parameter' => $newPageInfo['tx_sectioncontent_abstract_reference_url'],
+                'language' => $this->sys_language_uid,
+            ];
+            $newPageInfo["tx_sectioncontent_abstract_reference_url"] = $this->contentObject->typoLink_URL($instructions);
+        }
+
         $instructions = [
             'parameter' => $newPageInfo['uid'],
             'language' => $this->sys_language_uid,

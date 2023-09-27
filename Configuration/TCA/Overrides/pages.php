@@ -108,7 +108,7 @@ call_user_func(function()
                             ],
                         ],
                     ),
-                    'jpg,jpeg,png,svg'
+                    'jpg,jpeg,png,svg,mp4'
                 ),
             ),
             'tx_sectioncontent_abstract_image_2' => array(
@@ -145,7 +145,7 @@ call_user_func(function()
                             ],
                         ],
                     ),
-                    'jpg,jpeg,png,svg'
+                    'jpg,jpeg,png,svg,mp4'
                 ),
             ),
             'tx_sectioncontent_abstract_image_3' => array(
@@ -182,7 +182,7 @@ call_user_func(function()
                             ],
                         ],
                     ),
-                    'jpg,jpeg,png,svg'
+                    'jpg,jpeg,png,svg,mp4'
                 ),
             ),
             'tx_sectioncontent_abstract_image_4' => array(
@@ -219,7 +219,7 @@ call_user_func(function()
                             ],
                         ],
                     ),
-                    'jpg,jpeg,png,svg'
+                    'jpg,jpeg,png,svg,mp4'
                 ),
             ),
             'tx_sectioncontent_abstract_reference_url' => array(
