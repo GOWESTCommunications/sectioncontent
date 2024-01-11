@@ -632,6 +632,10 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         if ($this->settings['hideCurrentPage'] == '1') {
             $specialAddWhereArr[] = " p.uid NOT IN (" . $this->currentPageUid . ")";
+            
+            if($this->sys_language_uid > 0) {
+                $specialAddWhereArr[] = " p.l10n_parent NOT IN (" . $this->currentPageUid . ")";
+            }
         }
         
         if ($this->settings['ignoreUids']) {
