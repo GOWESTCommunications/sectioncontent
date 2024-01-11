@@ -2,7 +2,7 @@
     "name": "gowest/sectioncontent",
     "type": "typo3-cms-extension",
     "description": "Create page teaser JSON for use as Headless",
-    "version": "10.1.19",
+    "version": "10.1.20",
     "homepage": "http://go-west.at",
     "license": [
         "GPL-2.0+"
