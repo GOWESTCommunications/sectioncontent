@@ -834,12 +834,19 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     {
         $newUids = [];
         $sorted = [];
-        foreach($pages['pageInfo'] as $page) {
+        foreach ($pages['pageInfo'] as $page) {
             $sorted[] = $page;
         }
-        $limit = !empty($this->settings['limit']) ? (int)$this->settings['limit'] : count($sorted);
-        $sorted = array_slice($sorted, $this->offset, $limit);
-        foreach($sorted as $page) {
+
+        $defaultLimit = count($sorted);
+        $limit = !empty($this->settings['limit']) ? (int)$this->settings['limit'] : $defaultLimit;
+        $limit = max(1, min($limit, $defaultLimit));
+
+        $offset = isset($this->offset) && is_numeric($this->offset) ? (int)$this->offset : 0;
+        $offset = max(0, $offset);
+
+        $sorted = array_slice($sorted, $offset, $limit);
+        foreach ($sorted as $page) {
             $newUids[$page['uid']] = $page['uid'];
         }
 
