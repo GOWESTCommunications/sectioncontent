@@ -145,6 +145,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             'p.tx_sectioncontent_abstract_image_4',
             'p.tx_sectioncontent_abstract_reference_url',
             'p.l10n_parent',
+            'p.backend_layout',
         ];
 
         $this->baseQuery = "
