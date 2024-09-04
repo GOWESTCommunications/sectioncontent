@@ -40,7 +40,7 @@ call_user_func(function()
 
     $temporaryColumns = array(
             'tx_sectioncontent_abstract_title' => array(
-                //'l10n_mode' => 'prefixLangTitle',
+                'l10n_mode' => 'prefixLangTitle',
                 'label' => 'LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:tx_sectioncontent_abstract_title',
                 'l10n_cat' => 'text',
                 'config' => array(
@@ -53,6 +53,7 @@ call_user_func(function()
             'tx_sectioncontent_abstract_subtitle' => array(
                 'exclude' => 1,
                 'l10n_cat' => 'text',
+                'l10n_mode' => 'prefixLangTitle',
                 'label' => 'LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:tx_sectioncontent_abstract_subtitle',
                 'config' => array(
                     'type' => 'input',
@@ -64,6 +65,7 @@ call_user_func(function()
             'tx_sectioncontent_abstract_description' => array(
                 'exclude' => 1,
                 'l10n_cat' => 'text',
+                'l10n_mode' => 'prefixLangTitle',
                 'label' => 'LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:tx_sectioncontent_abstract_description',
                 'config' => array(
                     'type' => 'text',
@@ -242,7 +244,7 @@ call_user_func(function()
         $temporaryColumnsNames[] = 'tx_sectioncontent_abstract_attr_' . $count;
         $temporaryColumns['tx_sectioncontent_abstract_attr_' . $count] = array(
             'exclude' => 1,
-            //'l10n_mode' => 'mergeIfNotBlank',
+            'l10n_mode' => 'prefixLangTitle',
             'l10n_cat' => 'text',
             'label' => 'LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:tx_sectioncontent_abstract_attr_' . $count,
             'config' => array(
