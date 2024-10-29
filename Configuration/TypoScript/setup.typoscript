@@ -1,5 +1,10 @@
 
 tt_content.list =< lib.contentElementWithHeader
+tt_content.list.fields.content.fields.bodytext = TEXT
+tt_content.list.fields.content.fields.bodytext {
+    field  = bodytext
+    parseFunc =< lib.parseFunc_RTE
+}
 tt_content.list.fields.content.fields.data = CASE
 tt_content.list.fields.content.fields.data {
     key.field = list_type
