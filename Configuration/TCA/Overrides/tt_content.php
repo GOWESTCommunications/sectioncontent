@@ -32,7 +32,7 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
     ExtensionManagementUtility::addPiFlexFormValue(
         '*',
-        'FILE:EXT:sectioncontent/Configuration/FlexForms/flexform_teaser.xml'
-        $pluginSignature,
+        'FILE:EXT:sectioncontent/Configuration/FlexForms/flexform_teaser.xml',
+        $pluginSignature
     );
 })();

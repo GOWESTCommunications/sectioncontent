@@ -39,6 +39,7 @@ use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use FriendsOfTYPO3\Headless\Utility\FileUtility;
 use GOWEST\Sectioncontent\Utility\Settings;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
  * Controller for the Teaser object
@@ -46,13 +47,13 @@ use GOWEST\Sectioncontent\Utility\Settings;
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class TeaserController extends ActionController
 {
+    
     /**
-     * @var array
+     * Contains the settings of the current extension
      */
-    protected $settings = [];
-
+    protected array $settings;
     
     protected ImageService $imageService;
 
@@ -61,8 +62,14 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      */
     protected $currentPageUid = null;
 
-
-    protected $defaultViewObjectName = JsonView::class;
+    /**
+    * The default view class to use. Keep this 'null' for default fluid
+    * view, or set to 'JsonView::class' or some inheriting class.
+    *
+    * @var class-string|null
+    */
+    protected ?string $defaultViewObjectName = JsonView::class;
+    
 
     /** Category Mode: Or */
     const CATEGORY_MODE_OR = 1;
@@ -87,7 +94,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      *
      * @internal
      */
-    public function initializeAction()
+    public function initializeAction(): void
     {   
         $this->contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
         $this->languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
@@ -97,6 +104,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             'sys_file_reference'        => GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('sys_file_reference'),
             'sys_category_record_mm'    => GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('sys_category_record_mm'),
         ];
+
         
         foreach($this->settings as $key => $val) {
             $this->settings[$key] = trim($val);
@@ -395,7 +403,7 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->pages['link'] = $link;
         $this->pages['linktext'] = $this->settings['linktext'];
 
-        
+
         return $this->responseFactory->createResponse()
         ->withAddedHeader('Content-Type', 'application/json; charset=utf-8')
         ->withBody($this->streamFactory->createStream(json_encode($this->pages)));

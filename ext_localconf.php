@@ -16,3 +16,5 @@ ExtensionUtility::configurePlugin(
     [],
     ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
 );
+
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['Sectioncontent_PluginListTypeToCTypeUpdate'] = \GOWEST\Sectioncontent\Upgrades\PluginListTypeToCTypeUpdate::class;

@@ -81,148 +81,144 @@ call_user_func(function()
                 //'l10n_mode' => 'mergeIfNotBlank',
                 'l10n_cat' => 'text',
                 'label' => 'LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:tx_sectioncontent_abstract_image',
-                'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                    'tx_sectioncontent_abstract_image', array (
-                        'appearance' => array(
-                            'createNewRelationLinkTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:media.addFileReference',
-                            'showPossibleLocalizationRecords' => true,
-                            'showRemovedLocalizationRecords'  => true,
-                            'showSynchronizationLink'         => true,
-                            'showAllLocalizationLink'         => false,
-                            
-                            
-                        ),
-                        'minitems' => 0,
-                        'maxitems' => 1,
+                'config' => [
+                    'type' => 'file',
+                    'appearance' => array(
+                        'createNewRelationLinkTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:media.addFileReference',
+                        'showPossibleLocalizationRecords' => true,
+                        'showRemovedLocalizationRecords'  => true,
+                        'showSynchronizationLink'         => true,
+                        'showAllLocalizationLink'         => false,
                         
-                        'overrideChildTca' => [
-                            'types' => [
-                                '0' => [
-                                    'showitem' => '
-                                        --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                        --palette--;;filePalette'
-                                ],
-                                \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
-                                    'showitem' => '
-                                        --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                        --palette--;;filePalette'
-                                ],
+                        
+                    ),
+                    'minitems' => 0,
+                    'maxitems' => 1,
+                    
+                    'overrideChildTca' => [
+                        'types' => [
+                            '0' => [
+                                'showitem' => '
+                                    --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+                                    --palette--;;filePalette'
+                            ],
+                            \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
+                                'showitem' => '
+                                    --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+                                    --palette--;;filePalette'
                             ],
                         ],
-                    ),
-                    'jpg,jpeg,png,svg,mp4'
-                ),
+                    ],
+                    'allowed' => 'jpg,jpeg,png,svg,mp4',
+                ]
             ),
             'tx_sectioncontent_abstract_image_2' => array(
                 'exclude' => 1,
                 //'l10n_mode' => 'mergeIfNotBlank',
                 'l10n_cat' => 'text',
                 'label' => 'LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:tx_sectioncontent_abstract_image_2',
-                'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                    'tx_sectioncontent_abstract_image_2', array (
-                        'appearance' => array(
-                            'createNewRelationLinkTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:media.addFileReference',
-                            'showPossibleLocalizationRecords' => true,
-                            'showRemovedLocalizationRecords'  => true,
-                            'showSynchronizationLink'         => true,
-                            'showAllLocalizationLink'         => false,
-                            
-                            
-                        ),
-                        'minitems' => 0,
-                        'maxitems' => 1,
+                'config' => [
+                    'type' => 'file',
+                    'appearance' => array(
+                        'createNewRelationLinkTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:media.addFileReference',
+                        'showPossibleLocalizationRecords' => true,
+                        'showRemovedLocalizationRecords'  => true,
+                        'showSynchronizationLink'         => true,
+                        'showAllLocalizationLink'         => false,
                         
-                        'overrideChildTca' => [
-                            'types' => [
-                                '0' => [
-                                    'showitem' => '
-                                        --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                        --palette--;;filePalette'
-                                ],
-                                \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
-                                    'showitem' => '
-                                        --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                        --palette--;;filePalette'
-                                ],
+                        
+                    ),
+                    'minitems' => 0,
+                    'maxitems' => 1,
+                    
+                    'overrideChildTca' => [
+                        'types' => [
+                            '0' => [
+                                'showitem' => '
+                                    --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+                                    --palette--;;filePalette'
+                            ],
+                            \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
+                                'showitem' => '
+                                    --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+                                    --palette--;;filePalette'
                             ],
                         ],
-                    ),
-                    'jpg,jpeg,png,svg,mp4'
-                ),
+                    ],
+                    'allowed' => 'jpg,jpeg,png,svg,mp4',
+                ]
             ),
             'tx_sectioncontent_abstract_image_3' => array(
                 'exclude' => 1,
                 //'l10n_mode' => 'mergeIfNotBlank',
                 'l10n_cat' => 'text',
                 'label' => 'LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:tx_sectioncontent_abstract_image_3',
-                'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                    'tx_sectioncontent_abstract_image_3', array (
-                        'appearance' => array(
-                            'createNewRelationLinkTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:media.addFileReference',
-                            'showPossibleLocalizationRecords' => true,
-                            'showRemovedLocalizationRecords'  => true,
-                            'showSynchronizationLink'         => true,
-                            'showAllLocalizationLink'         => false,
-                            
-                            
-                        ),
-                        'minitems' => 0,
-                        'maxitems' => 1,
+                'config' => [
+                    'type' => 'file',
+                    'appearance' => array(
+                        'createNewRelationLinkTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:media.addFileReference',
+                        'showPossibleLocalizationRecords' => true,
+                        'showRemovedLocalizationRecords'  => true,
+                        'showSynchronizationLink'         => true,
+                        'showAllLocalizationLink'         => false,
                         
-                        'overrideChildTca' => [
-                            'types' => [
-                                '0' => [
-                                    'showitem' => '
-                                        --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                        --palette--;;filePalette'
-                                ],
-                                \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
-                                    'showitem' => '
-                                        --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                        --palette--;;filePalette'
-                                ],
+                        
+                    ),
+                    'minitems' => 0,
+                    'maxitems' => 1,
+                    
+                    'overrideChildTca' => [
+                        'types' => [
+                            '0' => [
+                                'showitem' => '
+                                    --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+                                    --palette--;;filePalette'
+                            ],
+                            \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
+                                'showitem' => '
+                                    --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+                                    --palette--;;filePalette'
                             ],
                         ],
-                    ),
-                    'jpg,jpeg,png,svg,mp4'
-                ),
+                    ],
+                    'allowed' => 'jpg,jpeg,png,svg,mp4',
+                ]
             ),
             'tx_sectioncontent_abstract_image_4' => array(
                 'exclude' => 1,
                 //'l10n_mode' => 'mergeIfNotBlank',
                 'l10n_cat' => 'text',
                 'label' => 'LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:tx_sectioncontent_abstract_image_4',
-                'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                    'tx_sectioncontent_abstract_image_4', array (
-                        'appearance' => array(
-                            'createNewRelationLinkTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:media.addFileReference',
-                            'showPossibleLocalizationRecords' => true,
-                            'showRemovedLocalizationRecords'  => true,
-                            'showSynchronizationLink'         => true,
-                            'showAllLocalizationLink'         => false,
-                            
-                            
-                        ),
-                        'minitems' => 0,
-                        'maxitems' => 1,
+                'config' => [
+                    'type' => 'file',
+                    'appearance' => array(
+                        'createNewRelationLinkTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:media.addFileReference',
+                        'showPossibleLocalizationRecords' => true,
+                        'showRemovedLocalizationRecords'  => true,
+                        'showSynchronizationLink'         => true,
+                        'showAllLocalizationLink'         => false,
                         
-                        'overrideChildTca' => [
-                            'types' => [
-                                '0' => [
-                                    'showitem' => '
-                                        --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                        --palette--;;filePalette'
-                                ],
-                                \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
-                                    'showitem' => '
-                                        --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                        --palette--;;filePalette'
-                                ],
+                        
+                    ),
+                    'minitems' => 0,
+                    'maxitems' => 1,
+                    
+                    'overrideChildTca' => [
+                        'types' => [
+                            '0' => [
+                                'showitem' => '
+                                    --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+                                    --palette--;;filePalette'
+                            ],
+                            \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
+                                'showitem' => '
+                                    --palette--;LLL:EXT:lang/Resources/Private/Language/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+                                    --palette--;;filePalette'
                             ],
                         ],
-                    ),
-                    'jpg,jpeg,png,svg,mp4'
-                ),
+                    ],
+                    'allowed' => 'jpg,jpeg,png,svg,mp4',
+                ]
             ),
             'tx_sectioncontent_abstract_reference_url' => array(
                 'exclude' => 1,

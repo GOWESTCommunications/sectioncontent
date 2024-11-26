@@ -1,424 +1,379 @@
 <?xml version="1.0" encoding="utf-8"?>
 <T3DataStructure>
-	<sheets>
-		<generalsheet>
-			<ROOT>
-				<TCEforms>
-					<sheetTitle>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.sheetGeneral</sheetTitle>
-				</TCEforms>
-				<type>array</type>
-				<el>
-                    <settings.layout>
-                        <TCEforms>
-                            <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.layout</label>
-                            <config>
-                                <type>select</type>
-                                <itemsProcFunc>GOWEST\Sectioncontent\Backend\ItemsProcFunc->sectioncontentLayouts</itemsProcFunc>
-                                <renderType>selectSingle</renderType>
-                                <items>
-                                    <!-- empty by default -->
-                                </items>
-                            </config>
-                        </TCEforms>
-                    </settings.layout>
-					<settings.link>
-                        <TCEforms>
-                            <label>Buttonlink</label>
-                            <config>
-								<type>input</type>
-								<renderType>inputLink</renderType>
-								<size>30</size>
-								<eval>trim</eval>
-								<softref>typolink,typolink_tag,images,url</softref>
-							</config>
-                        </TCEforms>
+    <sheets>
+        <generalsheet>
+            <ROOT>
+                <sheetTitle>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.sheetGeneral</sheetTitle>
+                <type>array</type>
+                <el>
+                    <layout>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.layout</label>
+                        <config>
+                            <type>select</type>
+                            <itemsProcFunc>GOWEST\Sectioncontent\Backend\ItemsProcFunc-&gt;sectioncontentLayouts</itemsProcFunc>
+                            <renderType>selectSingle</renderType>
+                            <items>
+                                <!-- empty by default -->
+                            </items>
+                        </config>
+                    </layout>
+                    <settings.link>
+                        <label>Buttonlink</label>
+                        <config>
+                            <type>input</type>
+                            <renderType>inputLink</renderType>
+                            <size>30</size>
+                            <eval>trim</eval>
+                            <softref>typolink,typolink_tag,images,url</softref>
+                        </config>
                     </settings.link>
-					<settings.linktext>
-                        <TCEforms>
-                            <label>Buttontext</label>
-                            <config>
-								<type>input</type>
-								<size>30</size>
-								<eval>trim</eval>
-							</config>
-                        </TCEforms>
+                    <settings.linktext>
+                        <label>Buttontext</label>
+                        <config>
+                            <type>input</type>
+                            <size>30</size>
+                            <eval>trim</eval>
+                        </config>
                     </settings.linktext>
-					<settings.source>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.sourceLabel</label>
-							<onChange>reload</onChange>
-							<config>
-								<type>select</type>
-                                <renderType>selectSingle</renderType>
-								<items type="array">
-									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
-										<numIndex index="1"></numIndex>
-									</numIndex>
-									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.source.thisChildren</numIndex>
-										<numIndex index="1">thisChildren</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.source.thisChildrenRecursively</numIndex>
-										<numIndex index="1">thisChildrenRecursively</numIndex>
-									</numIndex>
-									<numIndex index="3" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.source.custom</numIndex>
-										<numIndex index="1">custom</numIndex>
-									</numIndex>
-									<numIndex index="4" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.source.customChildren</numIndex>
-										<numIndex index="1">customChildren</numIndex>
-									</numIndex>
-									<numIndex index="5" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.source.customChildrenRecursively</numIndex>
-										<numIndex index="1">customChildrenRecursively</numIndex>
-									</numIndex>
-								</items>
-								<maxitems>1</maxitems>
-								<size>1</size>
-							</config>
-						</TCEforms>
-					</settings.source>
-					<settings.customPages>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.customPages</label>
-							<displayCond>FIELD:settings.source:IN:custom,customChildren,customChildrenRecursively</displayCond>
-							<config>
-								<type>group</type>
-								<internal_type>db</internal_type>
-								<allowed>pages</allowed>
-								<size>10</size>
-								<maxitems>999</maxitems>
-								<minitems>0</minitems>
-								<show_thumbs>1</show_thumbs>
-							</config>
-						</TCEforms>
-					</settings.customPages>
-					<settings.recursionDepthFrom>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.recursionDepthFrom</label>
-							<displayCond>FIELD:settings.source:IN:thisChildrenRecursively,customChildrenRecursively</displayCond>
-							<config>
-								<type>input</type>
-								<eval>int</eval>
-								<default>0</default>
-								<size>5</size>
-							</config>
-						</TCEforms>
-					</settings.recursionDepthFrom>
-					<settings.recursionDepth>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.recursionDepth</label>
-							<displayCond>FIELD:settings.source:IN:thisChildrenRecursively,customChildrenRecursively</displayCond>
-							<config>
-								<type>input</type>
-								<eval>int</eval>
-								<default>255</default>
-								<size>5</size>
-							</config>
-						</TCEforms>
-					</settings.recursionDepth>
-					<settings.orderByPlugin>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.orderByPlugin</label>
-							<displayCond>FIELD:settings.source:IN:custom</displayCond>
-							<config>
-								<type>select</type>
-                                <renderType>selectSingle</renderType>
-								<items type="array">
-									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
-										<numIndex index="1"></numIndex>
-									</numIndex>
-									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.yes</numIndex>
-										<numIndex index="1">1</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.no</numIndex>
-										<numIndex index="1">0</numIndex>
-									</numIndex>
-								</items>
-								<maxitems>1</maxitems>
-								<size>1</size>
-							</config>
-						</TCEforms>
-					</settings.orderByPlugin>
-				</el>
-			</ROOT>
-		</generalsheet>
-		<orderingsheet>
-			<ROOT>
-				<TCEforms>
-					<sheetTitle>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.ordering</sheetTitle>
-				</TCEforms>
-				<type>array</type>
-				<el>
-					<settings.orderBy>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order</label>
-							<onChange>reload</onChange>
-							<config>
-								<type>select</type>
-                                <renderType>selectSingle</renderType>
-								<items type="array">
-									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
-										<numIndex index="1"></numIndex>
-									</numIndex>
-									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.title</numIndex>
-										<numIndex index="1">title</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.sorting</numIndex>
-										<numIndex index="1">sorting</numIndex>
-									</numIndex>
-									<numIndex index="3" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.crdate</numIndex>
-										<numIndex index="1">crdate</numIndex>
-									</numIndex>
-									<numIndex index="4" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.tstamp</numIndex>
-										<numIndex index="1">tstamp</numIndex>
-									</numIndex>
-									<numIndex index="5" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.starttime</numIndex>
-										<numIndex index="1">starttime</numIndex>
-									</numIndex>
-									<numIndex index="6" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.endtime</numIndex>
-										<numIndex index="1">endtime</numIndex>
-									</numIndex>
-									<numIndex index="7" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.newtime</numIndex>
-										<numIndex index="1">newUntil</numIndex>
-									</numIndex>
-									<numIndex index="8" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.random</numIndex>
-										<numIndex index="1">random</numIndex>
-									</numIndex>
-									<numIndex index="9" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.customField</numIndex>
-										<numIndex index="1">customField</numIndex>
-									</numIndex>
-								</items>
-								<maxitems>1</maxitems>
-							</config>
-						</TCEforms>
-					</settings.orderBy>
-					<settings.orderByCustomField>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.orderByCustomField</label>
-							<displayCond>FIELD:settings.orderBy:IN:customField</displayCond>
-							<config>
-								<type>input</type>
-								<eval>trim</eval>
-								<default></default>
-								<size>16</size>
-							</config>
-						</TCEforms>
-					</settings.orderByCustomField>
-					<settings.orderDirection>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.orderDirection</label>
-							<displayCond>FIELD:settings.orderBy:IN:title,sorting,crdate,tstamp,starttime,endtime,customField</displayCond>
-							<config>
-								<type>select</type>
-                                <renderType>selectSingle</renderType>
-								<items type="array">
-									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
-										<numIndex index="1"></numIndex>
-									</numIndex>
-									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.orderDirection.asc</numIndex>
-										<numIndex index="1">asc</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.orderDirection.desc</numIndex>
-										<numIndex index="1">desc</numIndex>
-									</numIndex>
-								</items>
-								<maxitems>1</maxitems>
-								<size>1</size>
-							</config>
-						</TCEforms>
-					</settings.orderDirection>
-					<settings.limit>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.limit</label>
-							<config>
-								<type>input</type>
-								<eval>trim,num</eval>
-								<default></default>
-								<size>2</size>
-							</config>
-						</TCEforms>
-					</settings.limit>
-					<settings.offset>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.offset</label>
-							<config>
-								<type>input</type>
-								<eval>trim,num</eval>
-								<default></default>
-								<size>2</size>
-							</config>
-						</TCEforms>
-					</settings.offset>
-					<settings.showNavHiddenItems>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.showNavHiddenItems</label>
-							<config>
-								<type>select</type>
-                                <renderType>selectSingle</renderType>
-								<items type="array">
-									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
-										<numIndex index="1"></numIndex>
-									</numIndex>
-									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.yes</numIndex>
-										<numIndex index="1">1</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.no</numIndex>
-										<numIndex index="1">0</numIndex>
-									</numIndex>
-								</items>
-								<maxitems>1</maxitems>
-								<size>1</size>
-							</config>
-						</TCEforms>
-					</settings.showNavHiddenItems>
-					<settings.hideCurrentPage>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.hideCurrentPage</label>
-							<config>
-								<type>select</type>
-                                <renderType>selectSingle</renderType>
-								<items type="array">
-									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
-										<numIndex index="1"></numIndex>
-									</numIndex>
-									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.yes</numIndex>
-										<numIndex index="1">1</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.no</numIndex>
-										<numIndex index="1">0</numIndex>
-									</numIndex>
-								</items>
-								<maxitems>1</maxitems>
-								<size>1</size>
-								<default>1</default>
-							</config>
-						</TCEforms>
-					</settings.hideCurrentPage>
-					<settings.showDoktypes>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.showDoktypes</label>
-							<config>
-								<type>input</type>
-								<eval>trim</eval>
-								<size>8</size>
-								<default>1,2</default>
-							</config>
-						</TCEforms>
-					</settings.showDoktypes>
-					<settings.ignoreUids>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.ignoreUids</label>
-							<config>
-								<type>input</type>
-								<eval>trim</eval>
-								<size>16</size>
-							</config>
-						</TCEforms>
-					</settings.ignoreUids>
-					<settings.categoryMode>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode</label>
-							<config>
-								<type>select</type>
-                                <renderType>selectSingle</renderType>
-								<onChange>reload</onChange>
-								<items type="array">
-									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
-										<numIndex index="1"></numIndex>
-									</numIndex>
-									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode.or</numIndex>
-										<numIndex index="1">1</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode.and</numIndex>
-										<numIndex index="1">2</numIndex>
-									</numIndex>
-									<numIndex index="3" type="array">
-										<numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode.orNot</numIndex>
-										<numIndex index="1">3</numIndex>
-									</numIndex>
-                                    <numIndex index="4" type="array">
-                                        <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode.andNot</numIndex>
-                                        <numIndex index="1">4</numIndex>
-                                    </numIndex>
-                                    <numIndex index="5" type="array">
-                                        <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode.currentPageAnd</numIndex>
-                                        <numIndex index="1">5</numIndex>
-                                    </numIndex>
-                                    <numIndex index="6" type="array">
-                                        <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode.currentPageOr</numIndex>
-                                        <numIndex index="1">6</numIndex>
-									</numIndex>
-								</items>
-								<maxitems>1</maxitems>
-								<size>1</size>
-								<default></default>
-							</config>
-						</TCEforms>
-					</settings.categoryMode>
-					<settings.categoriesList>
-						<TCEforms>
-							<label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categories</label>
-							<displayCond>FIELD:settings.categoryMode:IN:1,2,3,4</displayCond>
-							<config>
-								<type>select</type>
-                                <renderType>selectTree</renderType>
-								<autoSizeMax>50</autoSizeMax>
-								<foreign_table>sys_category</foreign_table>
-								<foreign_table_where> AND sys_category.sys_language_uid IN (-1, 0) ORDER BY sys_category.sorting ASC</foreign_table_where>
-								<maxitems>9999</maxitems>
-								<renderMode>tree</renderMode>
-								<size>10</size>
-								<treeConfig>
-									<appearance>
-										<expandAll>1</expandAll>
-										<showHeader>1</showHeader>
-									</appearance>
-									<parentField>parent</parentField>
-								</treeConfig>
-							</config>
-						</TCEforms>
-					</settings.categoriesList>
-				</el>
-			</ROOT>
-		</orderingsheet>
-		<tempaltesheet>
-			<ROOT>
-				<TCEforms>
-					<sheetTitle>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.template</sheetTitle>
-				</TCEforms>
-				<type>array</type>
-				<el>
-				</el>
-			</ROOT>
-		</tempaltesheet>
-	</sheets>
+                    <settings.source>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.sourceLabel</label>
+                        <onChange>reload</onChange>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
+                                    <numIndex index="1"></numIndex>
+                                </numIndex>
+                                <numIndex index="1" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.source.thisChildren</numIndex>
+                                    <numIndex index="1">thisChildren</numIndex>
+                                </numIndex>
+                                <numIndex index="2" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.source.thisChildrenRecursively</numIndex>
+                                    <numIndex index="1">thisChildrenRecursively</numIndex>
+                                </numIndex>
+                                <numIndex index="3" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.source.custom</numIndex>
+                                    <numIndex index="1">custom</numIndex>
+                                </numIndex>
+                                <numIndex index="4" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.source.customChildren</numIndex>
+                                    <numIndex index="1">customChildren</numIndex>
+                                </numIndex>
+                                <numIndex index="5" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.source.customChildrenRecursively</numIndex>
+                                    <numIndex index="1">customChildrenRecursively</numIndex>
+                                </numIndex>
+                            </items>
+                            <maxitems>1</maxitems>
+                            <size>1</size>
+                        </config>
+                    </settings.source>
+                    <settings.customPages>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.customPages</label>
+                        <displayCond>FIELD:settings.source:IN:custom,customChildren,customChildrenRecursively</displayCond>
+                        <config>
+                            <type>group</type>
+                            <internal_type>db</internal_type>
+                            <allowed>pages</allowed>
+                            <size>10</size>
+                            <maxitems>999</maxitems>
+                            <minitems>0</minitems>
+                            <show_thumbs>1</show_thumbs>
+                        </config>
+                    </settings.customPages>
+                    <settings.recursionDepthFrom>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.recursionDepthFrom</label>
+                        <displayCond>FIELD:settings.source:IN:thisChildrenRecursively,customChildrenRecursively</displayCond>
+                        <config>
+                            <type>input</type>
+                            <eval>int</eval>
+                            <default>0</default>
+                            <size>5</size>
+                        </config>
+                    </settings.recursionDepthFrom>
+                    <settings.recursionDepth>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.recursionDepth</label>
+                        <displayCond>FIELD:settings.source:IN:thisChildrenRecursively,customChildrenRecursively</displayCond>
+                        <config>
+                            <type>input</type>
+                            <eval>int</eval>
+                            <default>255</default>
+                            <size>5</size>
+                        </config>
+                    </settings.recursionDepth>
+                    <settings.orderByPlugin>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.orderByPlugin</label>
+                        <displayCond>FIELD:settings.source:IN:custom</displayCond>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
+                                    <numIndex index="1"></numIndex>
+                                </numIndex>
+                                <numIndex index="1" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.yes</numIndex>
+                                    <numIndex index="1">1</numIndex>
+                                </numIndex>
+                                <numIndex index="2" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.no</numIndex>
+                                    <numIndex index="1">0</numIndex>
+                                </numIndex>
+                            </items>
+                            <maxitems>1</maxitems>
+                            <size>1</size>
+                        </config>
+                    </settings.orderByPlugin>
+                </el>
+            </ROOT>
+        </generalsheet>
+        <orderingsheet>
+            <ROOT>
+                <sheetTitle>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.ordering</sheetTitle>
+                <type>array</type>
+                <el>
+                    <settings.orderBy>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order</label>
+                        <onChange>reload</onChange>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
+                                    <numIndex index="1"></numIndex>
+                                </numIndex>
+                                <numIndex index="1" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.title</numIndex>
+                                    <numIndex index="1">title</numIndex>
+                                </numIndex>
+                                <numIndex index="2" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.sorting</numIndex>
+                                    <numIndex index="1">sorting</numIndex>
+                                </numIndex>
+                                <numIndex index="3" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.crdate</numIndex>
+                                    <numIndex index="1">crdate</numIndex>
+                                </numIndex>
+                                <numIndex index="4" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.tstamp</numIndex>
+                                    <numIndex index="1">tstamp</numIndex>
+                                </numIndex>
+                                <numIndex index="5" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.starttime</numIndex>
+                                    <numIndex index="1">starttime</numIndex>
+                                </numIndex>
+                                <numIndex index="6" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.endtime</numIndex>
+                                    <numIndex index="1">endtime</numIndex>
+                                </numIndex>
+                                <numIndex index="7" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.newtime</numIndex>
+                                    <numIndex index="1">newUntil</numIndex>
+                                </numIndex>
+                                <numIndex index="8" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.random</numIndex>
+                                    <numIndex index="1">random</numIndex>
+                                </numIndex>
+                                <numIndex index="9" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.order.customField</numIndex>
+                                    <numIndex index="1">customField</numIndex>
+                                </numIndex>
+                            </items>
+                            <maxitems>1</maxitems>
+                        </config>
+                    </settings.orderBy>
+                    <settings.orderByCustomField>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.orderByCustomField</label>
+                        <displayCond>FIELD:settings.orderBy:IN:customField</displayCond>
+                        <config>
+                            <type>input</type>
+                            <eval>trim</eval>
+                            <default></default>
+                            <size>16</size>
+                        </config>
+                    </settings.orderByCustomField>
+                    <settings.orderDirection>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.orderDirection</label>
+                        <displayCond>FIELD:settings.orderBy:IN:title,sorting,crdate,tstamp,starttime,endtime,customField</displayCond>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
+                                    <numIndex index="1"></numIndex>
+                                </numIndex>
+                                <numIndex index="1" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.orderDirection.asc</numIndex>
+                                    <numIndex index="1">asc</numIndex>
+                                </numIndex>
+                                <numIndex index="2" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.orderDirection.desc</numIndex>
+                                    <numIndex index="1">desc</numIndex>
+                                </numIndex>
+                            </items>
+                            <maxitems>1</maxitems>
+                            <size>1</size>
+                        </config>
+                    </settings.orderDirection>
+                    <settings.limit>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.limit</label>
+                        <config>
+                            <type>input</type>
+                            <eval>trim,num</eval>
+                            <default></default>
+                            <size>2</size>
+                        </config>
+                    </settings.limit>
+                    <settings.offset>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.offset</label>
+                        <config>
+                            <type>input</type>
+                            <eval>trim,num</eval>
+                            <default></default>
+                            <size>2</size>
+                        </config>
+                    </settings.offset>
+                    <settings.showNavHiddenItems>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.showNavHiddenItems</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
+                                    <numIndex index="1"></numIndex>
+                                </numIndex>
+                                <numIndex index="1" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.yes</numIndex>
+                                    <numIndex index="1">1</numIndex>
+                                </numIndex>
+                                <numIndex index="2" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.no</numIndex>
+                                    <numIndex index="1">0</numIndex>
+                                </numIndex>
+                            </items>
+                            <maxitems>1</maxitems>
+                            <size>1</size>
+                        </config>
+                    </settings.showNavHiddenItems>
+                    <settings.hideCurrentPage>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.hideCurrentPage</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
+                                    <numIndex index="1"></numIndex>
+                                </numIndex>
+                                <numIndex index="1" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.yes</numIndex>
+                                    <numIndex index="1">1</numIndex>
+                                </numIndex>
+                                <numIndex index="2" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.no</numIndex>
+                                    <numIndex index="1">0</numIndex>
+                                </numIndex>
+                            </items>
+                            <maxitems>1</maxitems>
+                            <size>1</size>
+                            <default>1</default>
+                        </config>
+                    </settings.hideCurrentPage>
+                    <settings.showDoktypes>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.showDoktypes</label>
+                        <config>
+                            <type>input</type>
+                            <eval>trim</eval>
+                            <size>8</size>
+                            <default>1,2</default>
+                        </config>
+                    </settings.showDoktypes>
+                    <settings.ignoreUids>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.ignoreUids</label>
+                        <config>
+                            <type>input</type>
+                            <eval>trim</eval>
+                            <size>16</size>
+                        </config>
+                    </settings.ignoreUids>
+                    <settings.categoryMode>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode</label>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <onChange>reload</onChange>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.default</numIndex>
+                                    <numIndex index="1"></numIndex>
+                                </numIndex>
+                                <numIndex index="1" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode.or</numIndex>
+                                    <numIndex index="1">1</numIndex>
+                                </numIndex>
+                                <numIndex index="2" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode.and</numIndex>
+                                    <numIndex index="1">2</numIndex>
+                                </numIndex>
+                                <numIndex index="3" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode.orNot</numIndex>
+                                    <numIndex index="1">3</numIndex>
+                                </numIndex>
+                                <numIndex index="4" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode.andNot</numIndex>
+                                    <numIndex index="1">4</numIndex>
+                                </numIndex>
+                                <numIndex index="5" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode.currentPageAnd</numIndex>
+                                    <numIndex index="1">5</numIndex>
+                                </numIndex>
+                                <numIndex index="6" type="array">
+                                    <numIndex index="0">LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categoryMode.currentPageOr</numIndex>
+                                    <numIndex index="1">6</numIndex>
+                                </numIndex>
+                            </items>
+                            <maxitems>1</maxitems>
+                            <size>1</size>
+                            <default></default>
+                        </config>
+                    </settings.categoryMode>
+                    <settings.categoriesList>
+                        <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.categories</label>
+                        <displayCond>FIELD:settings.categoryMode:IN:1,2,3,4</displayCond>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectTree</renderType>
+                            <autoSizeMax>50</autoSizeMax>
+                            <foreign_table>sys_category</foreign_table>
+                            <foreign_table_where> AND sys_category.sys_language_uid IN (-1, 0) ORDER BY sys_category.sorting ASC</foreign_table_where>
+                            <maxitems>9999</maxitems>
+                            <renderMode>tree</renderMode>
+                            <size>10</size>
+                            <treeConfig>
+                                <appearance>
+                                    <expandAll>1</expandAll>
+                                    <showHeader>1</showHeader>
+                                </appearance>
+                                <parentField>parent</parentField>
+                            </treeConfig>
+                        </config>
+                    </settings.categoriesList>
+                </el>
+            </ROOT>
+        </orderingsheet>
+        <tempaltesheet>
+            <ROOT>
+                <sheetTitle>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.template</sheetTitle>
+                <type>array</type>
+                <el></el>
+            </ROOT>
+        </tempaltesheet>
+    </sheets>
 </T3DataStructure>

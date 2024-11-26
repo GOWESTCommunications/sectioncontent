@@ -1,25 +1,21 @@
 
-# tt_content.list =< lib.contentElementWithHeader
-# tt_content.list.fields.content.fields.bodytext = TEXT
-# tt_content.list.fields.content.fields.bodytext {
-#     field  = bodytext
-#     parseFunc =< lib.parseFunc_RTE
-# }
-# tt_content.list.fields.content.fields.data = CASE
-# tt_content.list.fields.content.fields.data {
-#     key.field = list_type
-#     sectioncontent_pi1 = USER
-#     sectioncontent_pi1 {
-#         userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
-#         vendorName = GOWEST
-#         extensionName = Sectioncontent
-#         pluginName = Pi1
-#         controller = Teaser
-#     }
-# }
+tt_content.sectioncontent_pi1 =< lib.contentElementWithHeader
 
+plugin.sectioncontent_pi1 {
+    settings {
+        test = TEXT
+        test.value = test
+    }
+}
 
-tt_content.sectioncontent_pi1 = USER
+tt_content.sectioncontent_pi1.fields.data = USER
 tt_content.sectioncontent_pi1 {
-    userFunc = GOWEST\Sectioncontent\Controller\TeaserController->index
+    fields {
+        data {
+            userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+            extensionName = Sectioncontent
+            pluginName = Pi1
+            vendorName = GOWEST
+        }
+    }
 }
