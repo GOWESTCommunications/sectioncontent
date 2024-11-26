@@ -1,21 +1,11 @@
 
+tt_content.sectioncontent_pi1 >
 tt_content.sectioncontent_pi1 =< lib.contentElementWithHeader
 
-plugin.sectioncontent_pi1 {
-    settings {
-        test = TEXT
-        test.value = test
-    }
-}
-
-tt_content.sectioncontent_pi1.fields.data = USER
-tt_content.sectioncontent_pi1 {
-    fields {
-        data {
-            userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
-            extensionName = Sectioncontent
-            pluginName = Pi1
-            vendorName = GOWEST
-        }
-    }
+tt_content.sectioncontent_pi1.fields.content.fields.data = USER
+tt_content.sectioncontent_pi1.fields.content.fields.data {
+    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+    extensionName = Sectioncontent
+    pluginName = Pi1
+    vendorName = GOWEST
 }
