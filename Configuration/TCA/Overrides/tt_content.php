@@ -13,10 +13,6 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
         'Sectioncontent'
     );
 
-    
-    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'layout,select_key,pages,recursive,frame_class';
-    $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform'; 
-    
     $GLOBALS['TCA']['tt_content']['types']['list']['columnsOverrides'] = [
         'bodytext' => [
             'config' => [
@@ -26,17 +22,17 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
             ]
         ]
     ];
-    
+
     ExtensionManagementUtility::addToAllTCAtypes(
         'tt_content',
-        'bodytext;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:bodytext_formlabel',
-        'list',
-        'after:header'
+        '--div--;Configuration,pi_flexform,',
+        $pluginSignature,
+        'after:subheader',
     );
-    
 
     ExtensionManagementUtility::addPiFlexFormValue(
-        $pluginSignature,
+        '*',
         'FILE:EXT:sectioncontent/Configuration/FlexForms/flexform_teaser.xml'
+        $pluginSignature,
     );
 })();
