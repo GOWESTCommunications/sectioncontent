@@ -6,7 +6,7 @@
                 <sheetTitle>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.sheetGeneral</sheetTitle>
                 <type>array</type>
                 <el>
-                    <layout>
+                    <settings.layout>
                         <label>LLL:EXT:sectioncontent/Resources/Private/Language/locallang_db.xlf:sectioncontent.pi_flexform.layout</label>
                         <config>
                             <type>select</type>
@@ -16,7 +16,7 @@
                                 <!-- empty by default -->
                             </items>
                         </config>
-                    </layout>
+                    </settings.layout>
                     <settings.link>
                         <label>Buttonlink</label>
                         <config>
