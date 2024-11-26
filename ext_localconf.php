@@ -13,5 +13,6 @@ ExtensionUtility::configurePlugin(
     [
         TeaserController::class => 'index'
     ],
-    []
+    [],
+    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
 );
