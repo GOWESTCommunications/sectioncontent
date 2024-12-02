@@ -13,7 +13,7 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
         'Sectioncontent'
     );
 
-    $GLOBALS['TCA']['tt_content']['types']['list']['columnsOverrides'] = [
+    $GLOBALS['TCA']['tt_content']['types']['sectioncontent_pi1']['columnsOverrides'] = [
         'bodytext' => [
             'config' => [
                 'type' => 'text',
@@ -26,6 +26,13 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
     ExtensionManagementUtility::addToAllTCAtypes(
         'tt_content',
         '--div--;Configuration,pi_flexform,',
+        $pluginSignature,
+        'after:subheader',
+    );
+
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tt_content',
+        'bodytext,',
         $pluginSignature,
         'after:subheader',
     );
