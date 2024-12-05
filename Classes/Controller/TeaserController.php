@@ -40,6 +40,11 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use FriendsOfTYPO3\Headless\Utility\FileUtility;
 use GOWEST\Sectioncontent\Utility\Settings;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use GOWEST\Sectioncontent\Event\ModifyPageFieldsEvent;
+use GOWEST\Sectioncontent\Event\ModifyPageDataEvent;
+use GOWEST\Sectioncontent\Event\GetAdditionalDataEvent;
+
 
 /**
  * Controller for the Teaser object
@@ -96,6 +101,9 @@ class TeaserController extends ActionController
      */
     public function initializeAction(): void
     {   
+        
+        /** @var EventDispatcherInterface $eventDispatcher */
+        $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
         $this->contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
         $this->languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
         $this->sys_language_uid = $this->languageAspect->getId();
@@ -155,6 +163,11 @@ class TeaserController extends ActionController
             'p.l10n_parent',
             'p.backend_layout',
         ];
+
+        // Event to modify page select fields
+        $modifyPageFieldsEvent = new ModifyPageFieldsEvent($this->selectFields);
+        $modifiedPageFieldsEvent = $this->eventDispatcher->dispatch($modifyPageFieldsEvent);
+        $this->selectFields = $modifiedPageFieldsEvent->getPageFields();
 
         $this->baseQuery = "
             SELECT 
@@ -387,8 +400,19 @@ class TeaserController extends ActionController
         }
 
         $this->getFileReferences();
+
+        // Event to get additional data
+        $getAddtionalDataEvent = new GetAdditionalDataEvent($this->pages['uids'], $this->sys_language_uid);
+        $modifiedGetAddtionalDataEvent = $this->eventDispatcher->dispatch($getAddtionalDataEvent);
+        $additionalData = $modifiedGetAddtionalDataEvent->getAdditionalData();
+
         foreach ($this->pages['pageInfo'] as &$pageInfo) {
             $pageInfo = $this->getPageData($pageInfo);
+            
+            // Apply additional data for the page if needed
+            if($additionalData[$pageInfo['uid']]) {
+                $pageInfo = array_merge($pageInfo, $additionalData[$pageInfo['uid']]);
+            }
         }
 
         $this->pages = $this->performSpecialOrderings($this->pages);
@@ -402,6 +426,8 @@ class TeaserController extends ActionController
 
         $this->pages['link'] = $link;
         $this->pages['linktext'] = $this->settings['linktext'];
+
+
 
 
         return $this->responseFactory->createResponse()
@@ -446,6 +472,12 @@ class TeaserController extends ActionController
             'language' => $this->sys_language_uid,
         ];
         $newPageInfo['link'] = $this->contentObject->typoLink_URL($instructions);
+
+        
+        // Event to modify page data
+        $modifyPageDataEvent = new ModifyPageDataEvent($newPageInfo, $this->sys_language_uid, $this->contentObject);
+        $modifiedPageDataEvent = $this->eventDispatcher->dispatch($modifyPageDataEvent);
+        $newPageInfo = $modifiedPageDataEvent->getPageData();
 
         return $newPageInfo;
     }

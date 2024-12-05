@@ -6,28 +6,7 @@ tt_content.sectioncontent_pi1 =< lib.contentElementWithHeader
 tt_content.sectioncontent_pi1.fields.content.fields.bodytext = TEXT
 tt_content.sectioncontent_pi1.fields.content.fields.bodytext {
     field = bodytext
-    dataProcessing {
-        10 = TYPO3\CMS\Frontend\DataProcessing\SplitProcessor
-        10 {
-            if {
-                value = 2
-                isLessThan.field = bullets_type
-            }
-            fieldName = bodytext
-            removeEmptyEntries = 1
-            as = bullets
-        }
-        20 = TYPO3\CMS\Frontend\DataProcessing\CommaSeparatedValueProcessor
-        20 {
-            fieldName = bodytext
-            if {
-                value = 2
-                equals.field = bullets_type
-            }
-            fieldDelimiter = |
-            as = bullets
-        }
-    }
+    parseFunc =< lib.parseFunc_RTE
 }
 
 tt_content.sectioncontent_pi1.fields.content.fields.data = USER
