@@ -162,6 +162,7 @@ class TeaserController extends ActionController
             'p.tx_sectioncontent_abstract_reference_url',
             'p.l10n_parent',
             'p.backend_layout',
+            'p.sorting',
         ];
 
         // Event to modify page select fields
