@@ -642,7 +642,10 @@ class TeaserController extends ActionController
         //     }
         // }
         if(!empty($this->settings['orderByPlugin']) && $this->settings['source'] == 'custom' && $this->settings['customPages']) {
-            $this->orderBy = "FIELD(uid, ".$this->settings['customPages'].") ASC";
+            $this->orderBy = "FIELD(p.uid, ".$this->settings['customPages'].") ASC";
+            if($this->sys_language_uid > 0) {
+                $this->orderBy = "FIELD(p.l10n_parent, ".$this->settings['customPages'].") ASC";
+            }
         }
     }
 
