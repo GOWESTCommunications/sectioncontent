@@ -454,7 +454,9 @@ class TeaserController extends ActionController
                 foreach ($this->fileReferences[$newPageInfo['uid']][$mediaField] as $fileReference) {
                     $image = $this->imageService->getImage((string)$fileReference['uid'], null, true);
                     $image = $this->getFileUtility()->processFile($image);
-                    $image['properties']['crop'] = json_decode($image['properties']['crop'], true);
+                    if (isset($image['properties']['crop']) && is_string($image['properties']['crop'])) {
+                        $image['properties']['crop'] = json_decode($image['properties']['crop'], true);
+                    }
                     $newPageInfo[$mediaField][] = $image;
                 }
             }
