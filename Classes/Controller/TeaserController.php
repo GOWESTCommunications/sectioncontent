@@ -503,6 +503,7 @@ class TeaserController extends ActionController
                 AND c.hidden = 0
                 AND c.deleted = 0
                 AND c.starttime <= UNIX_TIMESTAMP()
+                AND c.sys_language_uid = " . $this->sys_language_uid . "
                 AND IF(c.endtime = 0, true, (c.endtime >= UNIX_TIMESTAMP()))
         ";
 
@@ -532,6 +533,7 @@ class TeaserController extends ActionController
                     AND c.hidden = 0
                     AND c.deleted = 0
                     AND c.starttime <= UNIX_TIMESTAMP()
+                    AND c.sys_language_uid = 0
                     AND IF(c.endtime = 0, true, (c.endtime >= UNIX_TIMESTAMP()))
             ";
 
