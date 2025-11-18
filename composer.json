@@ -2,7 +2,7 @@
     "name": "gowest/sectioncontent",
     "type": "typo3-cms-extension",
     "description": "Create page teasers with data from page properties and its content elements.",
-    "version": "13.1.3",
+    "version": "13.1.4",
     "homepage": "https://go-west.at",
     "license": ["GPL-2.0-or-later"],
     "keywords": ["TYPO3 CMS"],
