@@ -109,7 +109,7 @@ call_user_func(function()
                             ],
                         ],
                     ],
-                    'allowed' => 'jpg,jpeg,png,svg,mp4',
+                    'allowed' => 'jpg,jpeg,png,svg,webp,avif,mp4,webm,av1',
                 ]
             ),
             'tx_sectioncontent_abstract_image_2' => array(
@@ -145,7 +145,7 @@ call_user_func(function()
                             ],
                         ],
                     ],
-                    'allowed' => 'jpg,jpeg,png,svg,mp4',
+                    'allowed' => ',jpeg,png,svg,webp,avif,mp4,webm,av1',
                 ]
             ),
             'tx_sectioncontent_abstract_image_3' => array(
@@ -181,7 +181,7 @@ call_user_func(function()
                             ],
                         ],
                     ],
-                    'allowed' => 'jpg,jpeg,png,svg,mp4',
+                    'allowed' => ',jpeg,png,svg,webp,avif,mp4,webm,av1',
                 ]
             ),
             'tx_sectioncontent_abstract_image_4' => array(
@@ -217,7 +217,7 @@ call_user_func(function()
                             ],
                         ],
                     ],
-                    'allowed' => 'jpg,jpeg,png,svg,mp4',
+                    'allowed' => ',jpeg,png,svg,webp,avif,mp4,webm,av1',
                 ]
             ),
             'tx_sectioncontent_abstract_reference_url' => array(
