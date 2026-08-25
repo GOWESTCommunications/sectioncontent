@@ -928,6 +928,9 @@ class TeaserController extends ActionController
      */
     protected function typoLink_URL($instructions, int $pageId): string
     {
+        $targetPageId = $this->resolveShortcutTarget($pageId);
+        $instructions['parameter'] = $targetPageId;
+
         $url = $this->contentObject->typoLink_URL($instructions);
 
         if ($url === '') {
@@ -935,7 +938,6 @@ class TeaserController extends ActionController
         }
 
         try {
-            $targetPageId = $this->resolveShortcutTarget($pageId);
             return $this->getUrlUtility()->getFrontendUrlForPage($url, $targetPageId);
         } catch (\Throwable $e) {
             return $url;
