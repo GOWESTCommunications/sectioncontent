@@ -37,6 +37,7 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use FriendsOfTYPO3\Headless\Utility\FileUtility;
 use FriendsOfTYPO3\Headless\Utility\UrlUtility;
 use GOWEST\Sectioncontent\Utility\Settings;
@@ -927,15 +928,31 @@ class TeaserController extends ActionController
      */
     protected function typoLink_URL($instructions, int $pageId): string
     {
-        $urlUtility = $this->getUrlUtility();
         $url = $this->contentObject->typoLink_URL($instructions);
-        try {
-            $url = $urlUtility->getFrontendUrlForPage($url, $pageId);
-        } catch (\Exception $e) {
-            // Handle the exception if needed, e.g., log it or set a default URL
-            $url = $url; // Fallback to the original URL if an exception occurs
+
+        if ($url === '') {
+            return '';
         }
 
-        return $url;
+        try {
+            $targetPageId = $this->resolveShortcutTarget($pageId);
+            return $this->getUrlUtility()->getFrontendUrlForPage($url, $targetPageId);
+        } catch (\Throwable $e) {
+            return $url;
+        }
+    }
+
+    protected function resolveShortcutTarget(int $pageId): int
+    {
+        $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
+        $page = $pageRepository->getPage($pageId, true);
+
+        if ($page === []) {
+            return $pageId;
+        }
+
+        $resolved = $pageRepository->resolveShortcutPage($page, true, true);
+
+        return (int)($resolved['uid'] ?? $pageId);
     }
 }
