@@ -38,6 +38,7 @@ use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use FriendsOfTYPO3\Headless\Utility\FileUtility;
+use FriendsOfTYPO3\Headless\Utility\UrlUtility;
 use GOWEST\Sectioncontent\Utility\Settings;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -474,9 +475,9 @@ class TeaserController extends ActionController
             'parameter' => $newPageInfo['uid'],
             'language' => $this->sys_language_uid,
         ];
-        $newPageInfo['link'] = $this->contentObject->typoLink_URL($instructions);
 
-        
+        $newPageInfo['link'] = $this->typoLink_URL($instructions, $newPageInfo['uid']);
+
         // Event to modify page data
         $modifyPageDataEvent = new ModifyPageDataEvent($newPageInfo, $this->sys_language_uid, $this->contentObject);
         $modifiedPageDataEvent = $this->eventDispatcher->dispatch($modifyPageDataEvent);
@@ -911,5 +912,30 @@ class TeaserController extends ActionController
     protected function getFileUtility(): FileUtility
     {
         return GeneralUtility::makeInstance(FileUtility::class);
+    }
+
+    /**
+     * @return UrlUtility
+     */
+    protected function getUrlUtility(): UrlUtility
+    {
+        return GeneralUtility::makeInstance(UrlUtility::class);
+    }
+
+    /**
+     * @return string
+     */
+    protected function typoLink_URL($instructions, int $pageId): string
+    {
+        $urlUtility = $this->getUrlUtility();
+        $url = $this->contentObject->typoLink_URL($instructions);
+        try {
+            $url = $urlUtility->getFrontendUrlForPage($url, $pageId);
+        } catch (\Exception $e) {
+            // Handle the exception if needed, e.g., log it or set a default URL
+            $url = $url; // Fallback to the original URL if an exception occurs
+        }
+
+        return $url;
     }
 }
