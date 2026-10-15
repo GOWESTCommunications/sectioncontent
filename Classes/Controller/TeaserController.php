@@ -601,7 +601,8 @@ class TeaserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         //     }
         // }
         if(!empty($this->settings['orderByPlugin']) && $this->settings['source'] == 'custom' && $this->settings['customPages']) {
-            $this->orderBy = "FIELD(uid, ".$this->settings['customPages'].") ASC";
+            $orderField = ($this->sys_language_uid > 0) ? 'l10n_parent' : 'uid';
+            $this->orderBy = "FIELD(" . $orderField . ", " . $this->settings['customPages'] . ") ASC";
         }
     }
 
