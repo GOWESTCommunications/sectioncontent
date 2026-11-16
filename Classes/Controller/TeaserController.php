@@ -107,6 +107,7 @@ class TeaserController extends ActionController
         /** @var EventDispatcherInterface $eventDispatcher */
         $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
         $this->contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $this->contentObject->setRequest($this->request);
         $this->languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
         $this->sys_language_uid = $this->languageAspect->getId();
         $this->dbConnections = [
@@ -133,7 +134,8 @@ class TeaserController extends ActionController
      */
     public function indexAction()
     {
-        $this->currentPageUid = $GLOBALS['TSFE']->id;
+        // $GLOBALS['TSFE'] was removed in TYPO3 v14 – use the PageInformation request attribute
+        $this->currentPageUid = $this->request->getAttribute('frontend.page.information')->getId();
         $this->includePages = [];
         $this->excludePages = [];
         $this->pages = [];
